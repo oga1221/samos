@@ -190,7 +190,7 @@ class Plane:
     # assume that self.boundparticles is ordered
     def bdrep(self, ishift=0, idxshift=0):
         pids = [p.idx for p in self.boundparticles]
-        zpids = zip(range(len(pids)), pids, np.roll(pids,-1))
+        zpids = list(zip(list(range(len(pids))), pids, np.roll(pids,-1)))
         return [[i+ishift, pi+idxshift, pj+idxshift] for i, pi, pj in zpids]
 
 # need a way to combine two planes together
@@ -306,36 +306,36 @@ if __name__=='__main__':
     # N for circle
     args.N = int(round(args.L**2 )) # An individual particle has area pi R^2 = 4 pi
 
-    print 'adding {} particles'.format(args.N)
+    print('adding {} particles'.format(args.N))
 
-    print
-    print "\tActive Particles on Curved Spaces (APCS)"
-    print "\tBuilding a glued circle random configuration on the plane"
-    print
-    print "\tRastko Sknepnek"
-    print "\tUniversity of Dundee"
-    print "\t(c) 2013"
-    print
-    print "\tSilke Henkes"
-    print "\tUniversity of Aberdeen"
-    print "\t(c) 2014"
-    print "\t----------------------------------------------"
-    print
+    print()
+    print("\tActive Particles on Curved Spaces (APCS)")
+    print("\tBuilding a glued circle random configuration on the plane")
+    print()
+    print("\tRastko Sknepnek")
+    print("\tUniversity of Dundee")
+    print("\t(c) 2013")
+    print()
+    print("\tSilke Henkes")
+    print("\tUniversity of Aberdeen")
+    print("\t(c) 2014")
+    print("\t----------------------------------------------")
+    print()
     #print "\tRadius : ", args.R
-    print "\tpolydispersity: ", args.poly
+    print("\tpolydispersity: ", args.poly)
 
 
-    print "\tPacking fraction : ", args.phi
-    print "\tNumber of particles : ", args.N
+    print("\tPacking fraction : ", args.phi)
+    print("\tNumber of particles : ", args.N)
 
     #R = sqrt(args.N/args.phi)
     #print "\tRadius : ", R
 
-    print "\tRadius : ", args.L
-    print "\tAverage velocity : ", args.vavr
-    print "\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary
-    print "\tOutput file : ", args.output
-    print
+    print("\tRadius : ", args.L)
+    print("\tAverage velocity : ", args.vavr)
+    print("\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary)
+    print("\tOutput file : ", args.output)
+    print()
 
     start = datetime.now()
     #p = Circle(R, args.N, args.vavr,args.poly,args.boundary,args.bpacking)
@@ -350,6 +350,6 @@ if __name__=='__main__':
 
     total = end - start
 
-    print
-    print "  *** Completed in ", total.total_seconds(), " seconds *** "
-    print
+    print()
+    print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+    print()
