@@ -57,7 +57,7 @@ class Tesselation:
                     else:
                         # Need to implement copying over stuff here ...
                         tri0 = scipy.spatial.Delaunay(self.rval[:,0:2])
-                        print "Initially " + str(len(tri0.simplices)) + " triangles found."
+                        print("Initially " + str(len(tri0.simplices)) + " triangles found.")
                         #hull = scipy.spatial.ConvexHull(self.rval[:,0:2])
                         # shift and wrap so that the hull edges are in the centre
                         rshift =  self.geom.ApplyPeriodic2d(self.rval+0.5*np.array([self.geom.Lx,self.geom.Ly,0.0]))
@@ -111,7 +111,7 @@ class Tesselation:
                         loops[len(tokeep):(len(tokeep)+len(toadd)),:]=trishift.simplices[toadd,:]
                         loops[(len(tokeep)+len(toadd)):(len(tokeep)+len(toadd)+len(toaddx)),:]=trishift_x.simplices[toaddx,:]
                         loops[(len(tokeep)+len(toadd)+len(toaddx)):(len(tokeep)+len(toadd)+len(toaddx)+len(toaddy)),:]=trishift_y.simplices[toaddy,:]
-                        print "At the end we have " + str(len(loops)) + " triangles."
+                        print("At the end we have " + str(len(loops)) + " triangles.")
                         if debug:
                             plt.figure()
                             #plt.triplot(rshift[:,0], rshift[:,1], tri.simplices)
@@ -140,10 +140,10 @@ class Tesselation:
                             self.LoopCen.append(lcen)
                             self.LoopList.append(llist)
                             self.l+=1
-                    print "Found " + str(len(self.LoopList)) + " loops!"
+                    print("Found " + str(len(self.LoopList)) + " loops!")
                 elif (self.geom.manifold == 'sphere'):
                     # A little bird says that this is just the convex hull of my points
-                    print "Using convex hull to compute Delaunay triangulation on the sphere"
+                    print("Using convex hull to compute Delaunay triangulation on the sphere")
                     tri = scipy.spatial.ConvexHull(self.rval)
                     #print tri.simplices
                     if debug:
@@ -175,10 +175,10 @@ class Tesselation:
                         self.LoopCen.append(lcen)
                         self.LoopList.append(llist)
                         self.l+=1
-                    print "Found " + str(len(self.LoopList)) + " loops!"
+                    print("Found " + str(len(self.LoopList)) + " loops!")
                 else:
-                    print "Error: Delaunay algorithm does not exist for geometry " + self.geom.manifold
-                    print "Returning empty list. Use regular contact based tesselation instead."
+                    print("Error: Delaunay algorithm does not exist for geometry " + self.geom.manifold)
+                    print("Returning empty list. Use regular contact based tesselation instead.")
                     return [],[],[]
                
                 
@@ -236,13 +236,13 @@ class Tesselation:
 		#else:
 			#dmax=2*self.conf.sigma
 			#print "Warning: unimplemented potential, defaulting to maximum contact distance 2 if not otherwise specified"
-		print "Max distance: "+ str(dmax)	
-		print "Initial multiplier " + str(mult0)
+		print("Max distance: "+ str(dmax))	
+		print("Initial multiplier " + str(mult0))
 		for i in range(len(self.rval)):
 			neighbours=[]
 			#print i
 			if i%1000==0:
-                            print i
+                            print(i)
 			if closeHoles:
 				mult=mult0
 				while len(neighbours)<3 and mult<mult1:
@@ -279,7 +279,7 @@ class Tesselation:
 				count+=len(neighbours)
                         #print neighbours
                         if i%1000==0:
-                            print neighbours
+                            print(neighbours)
 		# Identify loops based on the neighbour list. Kick out any (one-way) contacts that have occured so far
 		Jarray=np.array(self.Jval)
 		self.LoopList=[]
@@ -287,7 +287,7 @@ class Tesselation:
 		self.ParList=[[] for k in range(len(self.rval))]
 		self.LoopCen=[]
 		self.l=0
-		print "Found " + str(len(neighList)) + " neighbours."
+		print("Found " + str(len(neighList)) + " neighbours.")
 		while len(neighList)>0:
 			idx=neighList[0]
 			#print idx
@@ -366,7 +366,7 @@ class Tesselation:
 			self.LoopCen.append(lcen)
 			self.LoopList.append(llist)
 			self.l+=1
-		print "Found " + str(len(self.LoopList)) + " loops!"
+		print("Found " + str(len(self.LoopList)) + " loops!")
 		return self.LoopList,self.Ival,self.Jval
       
 	# Much prettier: a loop that is too big (as measured by the mean square distance of the distances to the particles)
@@ -385,7 +385,7 @@ class Tesselation:
 				#print isLong
 			#if isLong>rmax:
 			if len(llist)>20:
-				print "Loop " + str(l0) + " with particles " + str(llist) + " is too big! "
+				print("Loop " + str(l0) + " with particles " + str(llist) + " is too big! ")
 				for k in range(len(llist)):
 					kside=k-1
 					if kside<0:
@@ -440,7 +440,7 @@ class Tesselation:
 		if not self.ordered_patches: 
 			raise Exception('Patches have to be ordered in order to cumpute their area.')
 		self.area = []
-		for k in xrange(len(self.ParList)):
+		for k in range(len(self.ParList)):
 			if len(self.ParList[k])>0:
 				xc, yc, zc = 0.0, 0.0, 0.0
 				for l in self.ParList[k]:
@@ -452,7 +452,7 @@ class Tesselation:
 				zc /= len(self.ParList[k])
 				N = len(self.ParList[k])
 				area = 0.0
-				for i in xrange(N):
+				for i in range(N):
 					#print self.ParList[i]
 					x1 = self.LoopCen[self.ParList[k][i]][0] - xc
 					y1 = self.LoopCen[self.ParList[k][i]][1] - yc

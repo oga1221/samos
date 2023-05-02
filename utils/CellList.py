@@ -46,10 +46,10 @@ class Cell:
     self.indices.append(idx)
     
   def printMe(self):
-    print "I am cell " + str(self.idx)
-    print "My position is: " + str(self.r)
-    print "My particles are: " + str(self.indices)
-    print "My neighbour cells are: " + str(self.neighbors)
+    print("I am cell " + str(self.idx))
+    print("My position is: " + str(self.r))
+    print("My particles are: " + str(self.indices))
+    print("My neighbour cells are: " + str(self.neighbors))
     
   
 class CellList:
@@ -72,7 +72,7 @@ class CellList:
     self.dz = self.geom.Lz/float(self.nz)
     # total number of cells
     n_cell = self.nx*self.ny*self.nz
-    print "Created CellList with " + str(n_cell) + " boxes."
+    print("Created CellList with " + str(n_cell) + " boxes.")
     # Cell list is a python list
     self.cell_list = [None for i in range(n_cell)]
     for i in range(self.nx):
@@ -144,17 +144,17 @@ class CellList:
 	i, j, k = int((rval[0]-xmin)/self.dx), int((rval[1]-ymin)/self.dy), int((rval[2]-zmin)/self.dz) 
 	# Some intractable rounding errors??
 	if i>=self.nx:
-		print i, " Too big x! ", self.nx
+		print(i, " Too big x! ", self.nx)
 		i=self.nx-1
 	if j>=self.ny:
-		print j, " Too big y!", self.ny
+		print(j, " Too big y!", self.ny)
 		j=self.ny-1
 	if k>=self.nz:
-		print k, " Too big z!", self.nz
+		print(k, " Too big z!", self.nz)
 		k=self.nz-1
 	cell_idx = self.ny*self.nz*i + self.nz*j + k
 	if cell_idx>=len(self.cell_list):
-		print cell_idx, " Too big index!"
+		print(cell_idx, " Too big index!")
 	return cell_idx
   
   # Add a particle to a cell: This means compute its cell index (if not given already)

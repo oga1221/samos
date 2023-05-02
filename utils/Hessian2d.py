@@ -72,7 +72,7 @@ class Hessian2d:
                 
 	def makeMatrix(self):
 		# This matrix is in principle 3N by 3N. We will have to be careful later on in throwing out extra off-surface modes
-		print "Hessian: Info - allocating the " + str(2*self.N) + " by " + str(2*self.N) + " 2d Hessian matrix."
+		print("Hessian: Info - allocating the " + str(2*self.N) + " by " + str(2*self.N) + " 2d Hessian matrix.")
 		self.Hessian=np.zeros((2*self.Nrigid,2*self.N))
 		# Construct it particle by particle (easiest way: everything here is always going to be N**2, no matter what, due to diagonalization algorithm)
 		# Follow the formula derived in my notes
@@ -80,15 +80,15 @@ class Hessian2d:
 		Normal=self.geom.UnitNormal(self.rval)
 		# So far, we really only have sphere or plane
 		if (self.geom.manifold=='plane'):
-			print "Hessian: Calculating Hessian on a plane!"
+			print("Hessian: Calculating Hessian on a plane!")
 		else:
-			print "Hessian: Error: 2d Hessian has not yet been implemented on " + self.geom.manifold + " manifolds!"  
+			print("Hessian: Error: 2d Hessian has not yet been implemented on " + self.geom.manifold + " manifolds!")  
 		fsum=0.0
 		fav=0.0
 		for i in range(self.N):
 			if i not in self.rattlers:
 				if (i%200==0):
-					print i
+					print(i)
 				# get some of the constants that are necessary here:
 				neighbours, drvec, dr=self.conf.getNeighbours(i,self.inter.getMult(),self.inter.getDmax())
 				# contact normal vectors
@@ -127,8 +127,8 @@ class Hessian2d:
 				#print diagsquare
 				self.Hessian[2*i:(2*i+2),2*i:(2*i+2)]=-diagsquare
 		fav/=self.N
-		print "Hessian: Estimating distance from mechanical equilibrium of initial configuration "
-		print "Scaled force sum is " + str(fsum/fav)
+		print("Hessian: Estimating distance from mechanical equilibrium of initial configuration ")
+		print("Scaled force sum is " + str(fsum/fav))
 			
 	def getModes(self):
 		# Let's have a look if what we get is in any way reasonable
@@ -140,7 +140,7 @@ class Hessian2d:
 			plt.pcolor(HessianSym)
 		# Use routines for hermitian eigenvector decomposition
 		# Default is ascending order, which suits us
-		print "Starting Diagonalisation!"
+		print("Starting Diagonalisation!")
 		self.eigval, self.eigvec = LA.eigh(HessianSym)
 		if self.debug:
 			# start with some debugging output
@@ -153,10 +153,10 @@ class Hessian2d:
                         # dimensional contributions
                         wx[u]=np.sum(self.eigvec[0:2*self.N:2,u]**2)
                         wy[u]=np.sum(self.eigvec[1:2*self.N:2,u]**2)
-		print "The smallest eigenvalue is: " + str(np.amin(self.eigval))
-		print self.eigval
-		print wx
-		print wy
+		print("The smallest eigenvalue is: " + str(np.amin(self.eigval)))
+		print(self.eigval)
+		print(wx)
+		print(wy)
 		#print wz
 	
 	def makeQrad(self,dq,qmax,nq):
@@ -189,10 +189,10 @@ class Hessian2d:
 	# project the modes into Fourier space to see how it's scaling
 	def ModesFourierLongTrans(self,whichmode,qmax=0.3,verbose=True):
 		eps=0.001
-		print "Fourier transforming mode" + str(whichmode)
+		print("Fourier transforming mode" + str(whichmode))
 		dq=2.0*np.pi/self.geom.Lx
 		nq=int(qmax/dq)
-		print "Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
 		fourierlong0=np.zeros((nq,nq),dtype=complex)
 		fouriertrans0=np.zeros((nq,nq),dtype=complex)
@@ -227,10 +227,10 @@ class Hessian2d:
 	# project the modes into Fourier space to see how it's scaling
 	def ModesFourier(self,whichmode,qmax=0.3,verbose=True):
 		eps=0.001
-		print "Fourier transforming mode" + str(whichmode)
+		print("Fourier transforming mode" + str(whichmode))
 		dq=2.0*np.pi/self.geom.Lx
 		nq=int(qmax/dq)
-		print "Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
 		fouriertrans=np.zeros((nq,nq,2),dtype=complex)
 		eigx=self.eigvec[0:2*self.N:2,whichmode]
@@ -252,12 +252,12 @@ class Hessian2d:
 	# get the elastic moduli cleanly once and for all. We won't diagonalise the dynamical matrix, but Fourier transform it instead
 	# We have the dynamical matrix in real space as self.Hessian
 	def getModuli(self,qmax=1.5,verbose=True):
-                print "Fourier transforming Hessian"
+                print("Fourier transforming Hessian")
 		dq=2.0*np.pi/self.geom.Lx
 		nq=int(qmax/dq)
-		print "Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
                 qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
-		print "After qrad"
+		print("After qrad")
 		longitudinal0=np.zeros((nq,nq))
 		transverse0=np.zeros((nq,nq))
 		for k in range(nq):
@@ -265,8 +265,8 @@ class Hessian2d:
 			for l in range(nq):
                             ky=qy[l]
                             if verbose:
-                                print kx
-                                print ky
+                                print(kx)
+                                print(ky)
                             # In Fourier space, for a given k (vector), we define the 2x2 k hessian as
                             khessian=np.zeros((2,2),dtype=complex)
                             # Hessian is defined with an upfront minus sign for some reason ...
@@ -291,7 +291,7 @@ class Hessian2d:
                                 longitudinal0[k,l]=eigk[0]
                                 transverse0[k,l]=eigk[1]
                             if verbose:
-                                print "Found eigenvalues long " + str(longitudinal0[k,l]) + " and transverse " + str(transverse0[k,l])
+                                print("Found eigenvalues long " + str(longitudinal0[k,l]) + " and transverse " + str(transverse0[k,l]))
                 nq2=int(2**0.5*nq)
 		longitudinal=np.zeros((nq2,))
 		transverse=np.zeros((nq2,))

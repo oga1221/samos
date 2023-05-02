@@ -136,7 +136,7 @@ for J in Jval:
 
 
             filename=picklefolder_silke+"/k_" + k + "/defect_data_R" + str(R) + "_J" + J + "_v" + v+ "_Tau" + Tau + "_k" +k +"_step" +step+"_nsteps" + nsteps +".p"
-            print filename
+            print(filename)
             data=pickle.load(open(filename))
             ndefects=data["numdefects_n"]
             defects=data["defects_n"]

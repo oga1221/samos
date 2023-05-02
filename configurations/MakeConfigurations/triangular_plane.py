@@ -121,10 +121,10 @@ print("\tActive Particles on Curved Spaces (APCS)")
 print("\tBuilding a triangular configuration (xy plane)")
 print()
 print()
-print("\tL : ", args.length)
-print("\tPacking fraction : ", args.phi)
-print("\tAverage velocity : ", args.vavr)
-print("\tOutput file : ", args.output)
+print(("\tL : ", args.length))
+print(("\tPacking fraction : ", args.phi))
+print(("\tAverage velocity : ", args.vavr))
+print(("\tOutput file : ", args.output))
 print()
 
 start = datetime.now()
@@ -133,12 +133,12 @@ start = datetime.now()
 # Round to the nearest square
 r0 = 1.0
 N0 = args.phi*args.length**2/(np.pi*r0**2)
-print("Raw number of particles " + str(N0))
+print(("Raw number of particles " + str(N0)))
 nside = int(round(np.sqrt(N0)))
-print("Number of particles a side " + str(nside))
+print(("Number of particles a side " + str(nside)))
 N = int(nside**2)
 phireal = N*np.pi*r0**2/args.length**2
-print("Number of particles " + str(N) + " and real phi " + str(phireal))
+print(("Number of particles " + str(N) + " and real phi " + str(phireal)))
 
 p = TriangularPlane(args.length, nside, N, args.vavr)
 p.write(args.output)
@@ -148,5 +148,5 @@ end = datetime.now()
 total = end - start
 
 print()
-print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print(("  *** Completed in ", total.total_seconds(), " seconds *** "))
 print()

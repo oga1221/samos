@@ -306,7 +306,7 @@ if __name__=='__main__':
     # N for circle
     args.N = int(round(args.L**2 )) # An individual particle has area pi R^2 = 4 pi
 
-    print('adding {} particles'.format(args.N))
+    print(('adding {} particles'.format(args.N)))
 
     print()
     print("\tActive Particles on Curved Spaces (APCS)")
@@ -322,19 +322,19 @@ if __name__=='__main__':
     print("\t----------------------------------------------")
     print()
     #print "\tRadius : ", args.R
-    print("\tpolydispersity: ", args.poly)
+    print(("\tpolydispersity: ", args.poly))
 
 
-    print("\tPacking fraction : ", args.phi)
-    print("\tNumber of particles : ", args.N)
+    print(("\tPacking fraction : ", args.phi))
+    print(("\tNumber of particles : ", args.N))
 
     #R = sqrt(args.N/args.phi)
     #print "\tRadius : ", R
 
-    print("\tRadius : ", args.L)
-    print("\tAverage velocity : ", args.vavr)
-    print("\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary)
-    print("\tOutput file : ", args.output)
+    print(("\tRadius : ", args.L))
+    print(("\tAverage velocity : ", args.vavr))
+    print(("\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary))
+    print(("\tOutput file : ", args.output))
     print()
 
     start = datetime.now()
@@ -351,5 +351,5 @@ if __name__=='__main__':
     total = end - start
 
     print()
-    print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+    print(("  *** Completed in ", total.total_seconds(), " seconds *** "))
     print()

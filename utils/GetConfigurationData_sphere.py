@@ -68,7 +68,7 @@ for J in Jlist:
 		directory=basefolder+'/' + args.name_1 +'_' + J + '/'+args.name_2 + '_' + v +'/'
 		conffile='nematic_'+args.name_1 + '_' + J + '_'+args.name_2+'_' + v +'.conf'
 		finput='nematic_'+args.name_1+'_'+J+'_'+args.name_2+'_'+v+'_0'
-		print finput
+		print(finput)
 		params = Param(directory+conffile)
 		files = sorted(glob(directory + finput+'*.dat'))[skip:]
 		u=0
@@ -77,19 +77,19 @@ for J in Jlist:
 			writeme = Writer(nematic)
 			if writeP:
 				outparticles = directory + 'frame' + str(u) + '_particles.vtp'
-				print outparticles
+				print(outparticles)
 				writeme.writeConfigurationVTK(conf,outparticles)
 			#plt.show()
 			conf.getTangentBundle()
 			tess = Tesselation(conf)
-			print "initialized tesselation"
+			print("initialized tesselation")
 			LoopList,Ival,Jval = tess.findLoop(args.closeHoles)
-			print "found loops"
+			print("found loops")
 			#print LoopList
 			if writeD:
 				#print "Still to be done ..."
 				outdefects = directory + '/frame' + str(u) + '_defects.vtp'	
-				print outdefects
+				print(outdefects)
 				defects = Defects(tess,conf)
 				if nematic:
 					defects_n, defects_v,numdefect_n,numdefect_v=defects.getDefects('nematic')
@@ -99,16 +99,16 @@ for J in Jlist:
 				defects_v_out.append(defects_v)
 				numdefects_n_out.append(numdefect_n)
 				numdefects_v_out.append(numdefect_v)
-				print "found defects"
+				print("found defects")
 				#defects.PlotDefects()
 				writeme.writeDefects(defects_n, defects_v,numdefect_n,numdefect_v,outdefects)
 			if writeT:
 				outpatches = directory + '/frame' + str(u) + '_patches.vtp'
-				print outpatches
+				print(outpatches)
 				if args.makeEdges:
 					tess.makeEdges(0.85)   
 				tess.OrderPatches()
-				print "ordered patches"
+				print("ordered patches")
 				writeme.writePatches(tess,outpatches)
 			
 			u+=1

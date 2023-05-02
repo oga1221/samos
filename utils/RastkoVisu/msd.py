@@ -49,21 +49,21 @@ parser.add_argument("-r", "--radius", type=float, default=1.0, help="sphere radi
 parser.add_argument("-S", "--step", type=float, default=5000, help="Time step multiplier")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tTrajectory of each particle"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
-print "\tSphere radius : ", args.radius
-print "\tTime step multiplier : ", args.step
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tTrajectory of each particle")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
+print("\tSphere radius : ", args.radius)
+print("\tTime step multiplier : ", args.step)
+print()
 
 start = datetime.now()
 
@@ -82,7 +82,7 @@ dist_dat = []
 
 i = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   x, y, z = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
   rr = np.vstack((x,y,z)).T
@@ -91,12 +91,12 @@ for f in files:
   #dist_dat.append(dist**2)
   i += 1
 
-print 'Computing MSD...'
+print('Computing MSD...')
 
 all_dist = np.zeros((x0.size,len(files)))
 all_dist_r = np.zeros((x0.size,len(files)))
-for tau in xrange(1,len(files)):
-  print 'Computing for tau : ', tau
+for tau in range(1,len(files)):
+  print('Computing for tau : ', tau)
   vals = np.nan_to_num(args.radius*np.arccos(np.einsum('ijk,ijk->ik',r[:,:,:-tau],r[:,:,tau:])/args.radius**2))
   dr = (r[:,:,:-tau]-r[:,:,tau:])**2
   ddr = np.sum(dr,axis=1)
@@ -124,8 +124,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

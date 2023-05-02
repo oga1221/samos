@@ -58,7 +58,7 @@ def metasave(fmeta, metad):
     # Saves a meta data file of key=value pairs to fmeta
     kvline = '{}={}\n'
     with open(fmeta, 'w') as fo:
-        for k,v in metad.items():
+        for k,v in list(metad.items()):
             fo.write(kvline.format(k, v))
 def metaread(fmeta):
     # let (#) denote comments
@@ -121,7 +121,7 @@ class Plotcompile(object):
             dirs = io.finddirs(self.dirglob)
 
         for di in dirs:
-            print di
+            print(di)
             datapath = path.join(di, ddir)
             dataf = path.join(datapath, dataname+'.dat')
             cglob = glob( path.join(di, '*.conf') )
@@ -148,7 +148,7 @@ class Plotcompile(object):
 def tracer(dfile):
     with open(dfile, 'r') as fi:
         ddump = io.readdump(fi)
-        x, y = ddump.values()
+        x, y = list(ddump.values())
         x = x[20:800]
         y = y[20:800]
         lx= np.log10(np.asarray(x))
@@ -160,12 +160,12 @@ def tracer(dfile):
 
         # compute slope
         m, c = np.polyfit(lx,ly,1)
-        print m, c
+        print((m, c))
         def fitline(lx):
             return 10**(m*lx + c)
         
         #fspace = np.linspace(lx[0], lx[-1], len(x), True)
-        fy = map(fitline, lx)
+        fy = list(map(fitline, lx))
         plt.loglog(x,y,'.b',x,fy,'--g')
         plt.title('gradient fitted line is {}'.format( m ))
 
@@ -182,10 +182,10 @@ def tracer(dfile):
 def pl(dfile, loglog=False):
     with open(dfile, 'r') as fi:
         ddump = io.readdump(fi)
-        x = ddump.values()[0]
-        plt.xlabel(ddump.keys()[0])
+        x = list(ddump.values())[0]
+        plt.xlabel(list(ddump.keys())[0])
 
-        for head, data in ddump.items()[1:]:
+        for head, data in list(ddump.items())[1:]:
             if loglog:
                 plt.loglog(x, data, label=head)
             else:
@@ -196,7 +196,7 @@ def pl(dfile, loglog=False):
         # compute the slope of log
 
         out = 'plots/'+ path.splitext(path.split(dfile)[1])[0] + '.png'
-        print 'saving plot to ', out
+        print(('saving plot to ', out))
         plt.savefig(out)
 
 # specficially for plotnghosts. 
@@ -215,10 +215,10 @@ def nghosts_compile(dataname):
         def macro():
             with open(dataname,'r') as fi:
                 ind = io.readdump(fi)
-                xlines.append(ind.values()[0])
-                xkeys.append(ind.keys()[0])
-                datlines.extend(ind.values()[1:])
-                datakeys.extend(ind.keys()[1:])
+                xlines.append(list(ind.values())[0])
+                xkeys.append(list(ind.keys())[0])
+                datlines.extend(list(ind.values())[1:])
+                datakeys.extend(list(ind.keys())[1:])
         return macro
         
     dirs = io.diriterate(compile_macro(dataname))
@@ -230,7 +230,7 @@ def nghosts_compile(dataname):
         dd = dd.strip('/')
         dd =dd.replace('_', '=')
         return dd[:-1] + '.' + dd[-1]
-    heads = map(legend_rule, dirs)
+    heads = list(map(legend_rule, dirs))
     for head, data in zip(heads, datlines):
         outd[head] = data
     dataout, ext  = path.splitext(dataname)
@@ -241,8 +241,8 @@ def nghosts_compile(dataname):
 # just for plotting, no reading
 @defaultsave
 def nttplot(ntt, log=False):
-    x = ntt.keys()
-    y = ntt.values()
+    x = list(ntt.keys())
+    y = list(ntt.values())
     #plt.plot(x, y)
     if log:
         plt.loglog(x, y)
@@ -260,15 +260,15 @@ def nttplot(ntt, log=False):
 def nttcompare():
     ptname= 'nttplot'
     pldirs = sorted(glob('./*/plots/data/'))
-    print 'reading data from', pldirs
+    print(('reading data from', pldirs))
     def reader(di):
         datf = os.path.join(di, ptname+'.dat')
         pld = {}
         with open(datf, 'r') as fo:
             ind = io.readdump(fo)
-            pld['x'], pld['y']  = ind.values()
+            pld['x'], pld['y']  = list(ind.values())
         return pld
-    pldata = map(reader, pldirs)
+    pldata = list(map(reader, pldirs))
     v0l= [0.01, 0.05, 0.10, 0.20]
     for v0, pld in zip(v0l, pldata):
         plt.plot(pld['x'], pld['y'], label='v0 {}'.format(v0))
@@ -282,14 +282,14 @@ def adj_compare():
     def reader(di):
         datf = os.path.join(di, name)
         stresses = _loadpkl(datf)
-        shear = np.mean(stresses['virial'].sstress.values())
+        shear = np.mean(list(stresses['virial'].sstress.values()))
         pressure = stresses['virial'].pressure
         return (pressure, shear)
-    adata = map(reader, adirs)
-    pressures, shears = zip(*adata)
+    adata = list(map(reader, adirs))
+    pressures, shears = list(zip(*adata))
     adjx = [di[-1] for di in adirs]
     try:
-        adjx =map(int ,adjx)
+        adjx =list(map(int ,adjx))
     except ValueError:
         sys.exit('Could not find the values of adj from the directory names')
     plt.plot(adjx, shears)
@@ -313,7 +313,7 @@ def nntopology(nnlist, outnum):
     plt.xlabel('No. of sides')
     plt.title('Neighbour topology of cell mesh. timestep {}'.format(outnum))
     outd = OrderedDict()
-    outd['id'], outd['n_number'] = zip(*list(enumerate(nnlist)))
+    outd['id'], outd['n_number'] = list(zip(*list(enumerate(nnlist))))
     return outd
 
 # helper for quickly plotting the msd curves for the types of particles
@@ -322,7 +322,7 @@ def plotmsd(timeline, msd):
     plt.xlabel('timestep')
     plt.ylabel('MSD')
     outd= {'timestep':timeline}
-    for tp, msdarr in msd.items():
+    for tp, msdarr in list(msd.items()):
         plt.loglog(timeline, msdarr, label='type {}'.format(tp))
         outd['msd_type_{}'.format(tp)] = msdarr
     #plt.plot(timeline, msd)
@@ -355,12 +355,12 @@ def growthexp(timeline=None, n_cells=None, ax=ax):
     ax.semilogy(timeline, n_cells)
     deg = 1
 
-    m, c = np.polyfit(timeline[fl[0]:fl[1]], map(np.log, n_cells[fl[0]:fl[1]]), deg)
-    print 'fitting: gradient = {}, c = {}'.format(m, c)
+    m, c = np.polyfit(timeline[fl[0]:fl[1]], list(map(np.log, n_cells[fl[0]:fl[1]])), deg)
+    print(('fitting: gradient = {}, c = {}'.format(m, c)))
     def fitline(x):
         return np.exp(c) * np.exp(m * x)
     fspace = np.linspace(timeline[0], timeline[-1], 10001)
-    fy = map(fitline, fspace)
+    fy = list(map(fitline, fspace))
     ax.semilogy(fspace, fy, linestyle='--')
 
     outd = OrderedDict()
@@ -413,7 +413,7 @@ def radial_all(gdir='tmp/', ax=ax):
 
 
     fstress = sorted(glob(os.path.join(gdir, '*.pkl')))
-    print fstress
+    print(fstress)
     for pklname in fstress:
 
         data = _loadpkl(pklname)
@@ -481,10 +481,10 @@ def grow_radial():
 @defaultsave
 def dev_texture(xx_shear):
     plt.clf()
-    x = xx_shear.keys()
-    ymean = map(np.mean, xx_shear.values())
-    yupper = map(max, xx_shear.values())
-    ylower = map(min, xx_shear.values())
+    x = list(xx_shear.keys())
+    ymean = list(map(np.mean, list(xx_shear.values())))
+    yupper = list(map(max, list(xx_shear.values())))
+    ylower = list(map(min, list(xx_shear.values())))
     plt.plot(x, ymean, marker='o')
     plt.plot(x, yupper, linestyle='--', color='g', marker='o')
     plt.plot(x, ylower, linestyle='--', color='g', marker='o')
@@ -579,16 +579,16 @@ def pretty_nnt(compare='active'):
     grs = []
     for dd in pdata:
         grs.append( retrieve_growth(dd['dir']) )
-        ntts = np.array(dd['data'].values()[1], dtype=int)
+        ntts = np.array(list(dd['data'].values())[1], dtype=int)
         nttall.append(ntts)
     mn = min([ntt.min() for ntt in nttall])
     mx = max([ntt.max() for ntt in nttall])
-    sides = np.array(range(mn, mx+1))
+    sides = np.array(list(range(mn, mx+1)))
     nbars = len(sides)
 
     #want to normalise the results and give fractions for each side number
     nttnormed = []
-    barmap = dict(zip(sides, range(nbars)))
+    barmap = dict(list(zip(sides, list(range(nbars)))))
     for ntt in nttall:
         norm = np.zeros(nbars)
         # bin the data
@@ -611,7 +611,7 @@ def pretty_nnt(compare='active'):
         shift = i * step
         sides = sides[1:-3]
         normed = normed[1:-3]
-        print normed
+        print(normed)
         rct = ax.bar(sides + shift, normed, step, color=colors[i%4])
         rcts.append(rct)
 
@@ -636,18 +636,18 @@ if __name__=='__main__':
     args = sys.argv[1:]
     nargs = len(args)
     if nargs is 0:
-        print 'cmplotting <function> [arguments]'
-        calls = [name for name, loc in locals().items() if callable(loc)
+        print('cmplotting <function> [arguments]')
+        calls = [name for name, loc in list(locals().items()) if callable(loc)
                 and name[0] != '_']
         for call in calls:
-            print call
+            print(call)
         sys.exit()
 
     # going to also process flags first
     # Not a general solution for this kind of command line tool hacking 
     # looks for flags that start with '-'
     flagcheck = [arg[0] == '-' for arg in args]
-    farg= (i for i, b in enumerate(flagcheck) if b == False).next()
+    farg= next((i for i, b in enumerate(flagcheck) if b == False))
     commandargs = args[farg:]
     flags = args[:farg]
     for f in flags:
@@ -656,30 +656,30 @@ if __name__=='__main__':
 
     args = commandargs
     fname = args[0]
-    print 'using function ', fname
+    print(('using function ', fname))
     fargs = args[1:]
     try:
         f_using = locals()[fname]
     except KeyError:
-        print 'I don\'t have a function \'%s\'', fname
+        print(('I don\'t have a function \'%s\'', fname))
         raise
 
     if len(fargs) is 0:
-        print 'No arguments given to cmplotting.%s' % fname
+        print(('No arguments given to cmplotting.%s' % fname))
 
         if hasattr(f_using, 'defaults'):
             fargs = f_using.defaults
-            print 'Using defaults ', f_using.defaults
+            print(('Using defaults ', f_using.defaults))
         else:
             fargs = []
 
     #print map(eval, fargs)
     if hasattr(f_using, 'evfs'):
         ff = [ev(i) for i, ev in zip(fargs, f_using.evfs)]
-        print 'using evfs to convert arguments'
+        print('using evfs to convert arguments')
     else:
         ff = fargs
-    print ff
+    print(ff)
 
     f_using(*ff)
 

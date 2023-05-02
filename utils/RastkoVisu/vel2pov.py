@@ -64,15 +64,15 @@ class POVPrint:
   
   def __init__(self,outfilename, data, to_plot='velocity'):
     self.outfilename = outfilename
-    if not (data.keys.has_key('x') and data.keys.has_key('y') and data.keys.has_key('z')):
+    if not ('x' in data.keys and 'y' in data.keys and 'z' in data.keys):
       raise Exception('Missing coordinates in the input data file.')
     if to_plot.lower() == 'velocity':
-      if not (data.keys.has_key('vx') and data.keys.has_key('vy') and data.keys.has_key('vz')):
+      if not ('vx' in data.keys and 'vy' in data.keys and 'vz' in data.keys):
         raise Exception('Missing velocities in the input data file.')
       else:
         self.to_plot = ['vx','vy','vz']
     elif to_plot.lower() == 'director':
-      if not (data.keys.has_key('nx') and data.keys.has_key('ny') and data.keys.has_key('nz')):
+      if not ('nx' in data.keys and 'ny' in data.keys and 'nz' in data.keys):
         raise Exception('Missing directors in the input data file.')
       else:
         self.to_plot = ['nx','ny','nz']
@@ -209,27 +209,27 @@ parser.add_argument("-T", "--to_plot", type=str, default='director', help="type 
 parser.add_argument("-a", "--angle", type=float, default=50, help="camera angle (in degrees)")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tConvert velocity field into POV-Ray scene"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
-print "\tInput : ", args.input
-print "\tOutput : ", args.output
-print "\tScale velocity : ", args.scale
-print "\tBase arrow radius : ", args.base_radius
-print "\tCone base radius : ", args.base_radius*args.cone
-print "\tArrow base fraction : ", args.hight
-print "\tArrow colour : ", args.cone_colour
-print "\tParticle colour : ", args.particle_colour
-print "\tParticle radius : ", args.particle_radius
-print "\tOutput particle : ", args.to_plot
-print "\tCamera angle : ", args.angle
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tConvert velocity field into POV-Ray scene")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
+print("\tInput : ", args.input)
+print("\tOutput : ", args.output)
+print("\tScale velocity : ", args.scale)
+print("\tBase arrow radius : ", args.base_radius)
+print("\tCone base radius : ", args.base_radius*args.cone)
+print("\tArrow base fraction : ", args.hight)
+print("\tArrow colour : ", args.cone_colour)
+print("\tParticle colour : ", args.particle_colour)
+print("\tParticle radius : ", args.particle_radius)
+print("\tOutput particle : ", args.to_plot)
+print("\tCamera angle : ", args.angle)
+print() 
 
 start = datetime.now()
 
@@ -251,6 +251,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

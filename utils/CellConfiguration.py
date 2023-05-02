@@ -41,15 +41,15 @@ class CellConfiguration:
 		self.param=param
 		# Read the local data
 		geometries={'sphere':GeometrySphere,'plane':GeometryPlane,'plane_periodic':GeometryPeriodicPlane,'none':Geometry,'tube':GeometryTube,'peanut':GeometryPeanut,'hourglass':GeometryHourglass}
-		print "Processing file : ", filename_cells
+		print("Processing file : ", filename_cells)
 		data = ReadData(filename_cells)
-		if data.keys.has_key('x'):
+		if 'x' in data.keys:
 			x, y, z = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
 		else:
-			print "Error: did not find positions in data file!"
+			print("Error: did not find positions in data file!")
 			return 1
 		self.N=len(x)
-		if data.keys.has_key('vx'):
+		if 'vx' in data.keys:
 			vx, vy, vz = np.array(data.data[data.keys['vx']]), np.array(data.data[data.keys['vy']]), np.array(data.data[data.keys['vz']])
 		else:
 			vx, vy, vz = np.zeros(np.shape(x)),np.zeros(np.shape(y)),np.zeros(np.shape(z))
@@ -57,28 +57,28 @@ class CellConfiguration:
 			nx, ny, nz = np.array(data.data[data.keys['nx']]), np.array(data.data[data.keys['ny']]), np.array(data.data[data.keys['nz']])
 		except KeyError:
 			nx, ny, nz = np.zeros(np.shape(x)),np.zeros(np.shape(y)),np.zeros(np.shape(z))
-		if data.keys.has_key('fx'):
+		if 'fx' in data.keys:
 			fx, fy, fz = np.array(data.data[data.keys['fx']]), np.array(data.data[data.keys['fy']]), np.array(data.data[data.keys['fz']])
 		# Now some cell-specific things: 
 		# area  cell_area  cell_perim  cont_num  boundary 
-		if data.keys.has_key('area'):
+		if 'area' in data.keys:
 			self.area_native=np.array(data.data[data.keys['area']])
 		else:
 			# Assume the default of pi
 			self.area_native=3.141592*np.ones(np.shape(x))
-		if data.keys.has_key('cell_area'):
+		if 'cell_area' in data.keys:
 			self.area=np.array(data.data[data.keys['cell_area']])
-		if data.keys.has_key('cell_perim'):
+		if 'cell_perim' in data.keys:
 			self.perim=np.array(data.data[data.keys['cell_perim']])
-		if data.keys.has_key('cont_num'):
+		if 'cont_num' in data.keys:
 			self.ncon=np.array(data.data[data.keys['cont_num']])
-		if data.keys.has_key('boundary'):
+		if 'boundary' in data.keys:
 			self.boundary=np.array(data.data[data.keys['boundary']])
-		if data.keys.has_key('type'):
+		if 'type' in data.keys:
 			self.ptype = data.data[data.keys['type']]
 		else:
 			self.ptype = np.ones((self.N,))
-		if data.keys.has_key('flag'):
+		if 'flag' in data.keys:
 			self.flag = data.data[data.keys['flag']]
 		self.rval = np.column_stack((x,y,z))
 		self.vval = np.column_stack((vx,vy,vz))
@@ -86,7 +86,7 @@ class CellConfiguration:
 		self.fval = np.column_stack((fx,fy,fz))
 		# Create the right geometry environment (TBC):
 		self.geom=geometries[param.constraint](param)
-		print self.geom
+		print(self.geom)
 		# Create the Interaction class
 		# Not yet created for the active vertex model
 		#self.inter=Interaction(self.param,self.radius,ignore)
@@ -116,7 +116,7 @@ class CellConfiguration:
 		cellsize=param.nlist_rcut
 		if cellsize>5*self.inter.sigma:
 			cellsize=5*self.inter.sigma
-			print "Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!"
+			print("Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!")
 		self.clist=CellList(self.geom,cellsize)
 		# Populate it with all the particles:
 		for k in range(self.N):
@@ -148,7 +148,7 @@ class CellConfiguration:
 		cellsize=self.param.nlist_rcut
 		if cellsize>5*self.inter.sigma:
 			cellsize=5*self.inter.sigma
-			print "Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!"
+			print("Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!")
 		self.clist=CellList(self.geom,cellsize)
 		# Populate it with all the particles:
 		for k in range(self.N):
@@ -164,7 +164,7 @@ class CellConfiguration:
 		#inside=[index for index,value in enumerate(rdist) if value<maskradius]
 		#print maskradius
 		Ninside=len(inside)
-		print Ninside
+		print(Ninside)
 		vel2 = self.vval[inside,0]**2 + self.vval[inside,1]**2 + self.vval[inside,2]**2
 		vel2av=np.mean(vel2)
 		# mean square force

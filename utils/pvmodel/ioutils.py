@@ -8,7 +8,7 @@ def readfc(fcfile):
     faces= []
     with open(fcfile, 'r') as fc:
         for line in fc:
-            face = map(int, line.split())
+            face = list(map(int, line.split()))
             faceid, face = face[0], face[1:]
             if len(face) > 3:
                 # should be a boundary face
@@ -22,10 +22,10 @@ def readfc(fcfile):
 
 #print square data to file, first column is int and rest are floats.
 def dump(dd, fo, htag='#', outstr=None):
-    nc = len(dd.keys())
+    nc = len(list(dd.keys()))
     #fo.write(''.join([htag+' ', '%s\t '*nc, '\n']) % tuple(dd.keys()))
-    fo.write((htag+' '+'{:<14} '*nc + '\n').format(*dd.keys()))
-    ddv = dd.values()
+    fo.write((htag+' '+'{:<14} '*nc + '\n').format(*list(dd.keys())))
+    ddv = list(dd.values())
     nr = len(ddv[0]) # assumption
     if not outstr:
         outstr = '      '+'{:<14} '*nc + '\n' 
@@ -52,7 +52,7 @@ def readdump(fo):
                 try:
                     cdat = float(dat)
                 except ValueError:
-                    print 'data item {} is not float or int'.format(dat)
+                    print(('data item {} is not float or int'.format(dat)))
                     raise
             dd[headers[i]].append( cdat )
     return dd
@@ -61,44 +61,44 @@ def freaddump(ifile):
         return readdump(fi)
 
 def dumpargs(dd, fo):
-    r1 = max(map(len, dd.keys()))
+    r1 = max(list(map(len, list(dd.keys()))))
     argsformat = '{:<%d} {:>10}\n' % r1
-    for k, v in dd.items():
+    for k, v in list(dd.items()):
         fo.write(argsformat.format(k, v))
     
 
 # debugging
 
 def dirk(A):
-    print A
-    print dir(A)
+    print(A)
+    print((dir(A)))
     sys.exit()
 def shiv(al):
     for a in al:
-        print a
-        print eval(a)
+        print(a)
+        print((eval(a)))
 
 from matplotlib import pyplot as plt
 def plotrange(f, a, b, n=100):
     x = np.linspace(a,b,n+1)
-    y = map(f, x)
+    y = list(map(f, x))
     plt.plot(x, y)
     plt.show()
 
 #np.set_printoptions(threshold=np.nan)
 
 import contextlib
-import cStringIO
+import io
 @contextlib.contextmanager
 def nostdout():
     save_stdout = sys.stdout
-    sys.stdout = cStringIO.StringIO()
+    sys.stdout = io.StringIO()
     yield
     sys.stdout = save_stdout
 
 # want to print a vector object
 def dumpvec(vec):
-    print omvec(vec)
+    print((omvec(vec)))
 
 def scatter(mesh, mesh2):
     arrl = []
@@ -123,10 +123,10 @@ def scatter(mesh, mesh2):
 
 # how to print a dictionary containing serious data
 def stddict(dd):
-    for k, v in dd.items():
-        print k
-        print v
-        print 
+    for k, v in list(dd.items()):
+        print(k)
+        print(v)
+        print() 
     
 
 
@@ -137,7 +137,7 @@ def stddict(dd):
 # openmesh has a vector object
 # too lazy to use this to convert to numpy arrays
 # fixed to three dimensions...
-
+    
 def omvec(vec):
     return np.array([vec[0], vec[1], vec[2]])
 
@@ -152,7 +152,7 @@ def idtopt(mesh, rmuid):
 
 import collections
 
-class OrderedSet(collections.MutableSet):
+class OrderedSet(collections.abc.MutableSet):
 
     def __init__(self, iterable=None):
         self.end = end = [] 
@@ -235,10 +235,10 @@ def finddirs(re='*/'):
 def diriterate(macro, re='*/'):
     dirs = finddirs(re)
     bdir = os.getcwd()
-    print dirs
+    print(dirs)
     for di in dirs:
         os.chdir(di)
-        print '$utools$ Entering directory ', di
+        print(('$utools$ Entering directory ', di))
         macro()
         os.chdir(bdir)
     return dirs

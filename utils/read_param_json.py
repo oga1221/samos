@@ -35,7 +35,7 @@ class Param:
 	def __init__(self,filename):
 		file=open(filename)
 		self.data=json.load(dummy)
-		print "Loaded json configuration file ", filename
+		print("Loaded json configuration file ", filename)
 		self.unpack_integrator()
 		self.unpack_geometry()
 		self.unpack_potentials()
@@ -44,21 +44,21 @@ class Param:
         def unpack_integrator(self):
                 # Pray that the order never changes ...
                 # This is very much the case when there is only one integrator
-                self.integrator=data['integrator'].keys()[0]
+                self.integrator=list(data['integrator'].keys())[0]
                 self.dt=float(data['integrator']['dt'])
-                print "Time step: " + str(self.dt)
+                print("Time step: " + str(self.dt))
                 self.movegroup=data['integrator']['group']
-                print "Moving group: " + self.movegroup
+                print("Moving group: " + self.movegroup)
                 if self.integrator=='brownian':
                         self.nu=float(data['integrator']['nu'])
-                        print "Noise strength: " + str(self.nu)
+                        print("Noise strength: " + str(self.nu))
                         self.mu=float(data['integrator']['mu'])
-                        print "Mobility: " + str(self.mu)
+                        print("Mobility: " + str(self.mu))
                         self.seed=float(data['integrator']['seed'])
-                        print "Dynamics seed: " + self.seed
+                        print("Dynamics seed: " + self.seed)
 			self.dt =float(self.int_params['dt'])
 			try:
-                                activemotion=data['potential']['external'].keys()
+                                activemotion=list(data['potential']['external'].keys())
                                 if activemotion[0]=='self_propulsion':
                                     self.v0=float(data['potential']['external']['self_propulsion']['alpha'])
                         except:
@@ -89,7 +89,7 @@ class Param:
 	# This is only partially backwards compatible with the other parameter class: Before, we did not allow for more than one potential at a time
 	# Each list element behaves like the previous version of potential data
         def unpack_potentials(self):
-            self.potentials=data['potential']['pair'].keys()
+            self.potentials=list(data['potential']['pair'].keys())
             self.pot_params=[]
             for pot in self.potentials:
                 # Add the generic bit of dictionary
@@ -102,7 +102,7 @@ class Param:
                     
         # get the box size, the constraints, and whether we are periodic or not
         def unpack_geometry(self):
-            consvals=data['constraint'].keys()
+            consvals=list(data['constraint'].keys())
             try:
                 consvals.remove('max_iter')
             except:
@@ -117,7 +117,7 @@ class Param:
             except:
                 pass
             self.constraint=consvals[0]
-            print self.constraint
+            print(self.constraint)
             # We *need* a box. Define it 100x100x100 unless specified otherwise
             self.box=[100.0,100.0,100.0]
             # We also need to know about periodicity. Set default to false.

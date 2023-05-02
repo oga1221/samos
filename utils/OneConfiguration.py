@@ -36,11 +36,11 @@ conf = Configuration(params,basefolder+filename)
 plt.show()
 conf.getTangentBundle()
 tess = Tesselation(conf)
-print "initialized tesselation"
+print("initialized tesselation")
 LoopList,Ival,Jval = tess.findLoop()
-print "found loops"
+print("found loops")
 tess.OrderPatches()
-print "ordered patches"
+print("ordered patches")
 writeme = Writer()
 outparticles = basefolder + '/' + outname + '_particles.vtp'
 outdefects = basefolder + '/' + outname + '_defects.vtp'

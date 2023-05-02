@@ -131,7 +131,7 @@ def configuration(args):
         confs = glob.glob(args.conf)
         if not confs:
             return args
-        print 'found configuration file(s)', confs
+        print(('found configuration file(s)', confs))
         args.conf = confs[0]
 
 
@@ -148,7 +148,7 @@ def configuration(args):
     # Conversion between the names I gave the parameters and the SAMoS names
     samparams = ['lambda', 'K', 'gamma']
     myparams = ['L', 'k', 'gamma']
-    pmap = dict(zip(samparams, myparams))
+    pmap = dict(list(zip(samparams, myparams)))
 
     # This will get the default attributes but not necessarily the correct values 
     # which are set by pair_type_param
@@ -188,15 +188,15 @@ def configuration(args):
                 type_2 = int(atype_2.val)
                 lam = float(alambda.val)
                 lpairs[frozenset([type_1, type_2])] = lam
-                print 'setting lambda to {} for types {} and {}'.format(type_1, 
-                        type_2, lam)
+                print(('setting lambda to {} for types {} and {}'.format(type_1, 
+                        type_2, lam)))
 
 
             elif param.name == 'soft':
                 pass # for now
 
     args.lpairs = lpairs
-    print 'default lambda is {}'.format(lpairs['default'])
+    print(('default lambda is {}'.format(lpairs['default'])))
 
     # We never consider the boundary particles as cells anymore.
     args.exclude = True
@@ -209,20 +209,20 @@ def shapeindex(args):
         tperim = -args.L/args.gamma
     except ZeroDivisionError:
         tperim = 0.
-        print 'warning, target perimeter undefined'
-    print 'target perimeter', tperim
+        print('warning, target perimeter undefined')
+    print(('target perimeter', tperim))
     sindex= tperim / np.sqrt(args.a0)
-    print 'shape index', sindex
+    print(('shape index', sindex))
     args.sindex = sindex
     return args
 
 
 def print_parameters():
-    print 'vertex model parameters'
-    print 'k ', args.k
-    print 'gamma ',  args.gamma
-    print 'L ',args.L
-    print
+    print('vertex model parameters')
+    print(('k ', args.k))
+    print(('gamma ',  args.gamma))
+    print(('L ',args.L))
+    print()
 
 if __name__=='__main__':
 
@@ -269,7 +269,7 @@ if __name__=='__main__':
         elif args.all:
         # plot the number of transitions
         #Want to be able to iterate over all folders in a directory, run analyse and collect data
-            print 'ntt'
+            print('ntt')
             ntt = OrderedDict()
             import opdir as op
             def macro():
@@ -281,7 +281,7 @@ if __name__=='__main__':
                 ntrans = trans.tlist.nt
                 ntt[args.sindex] = ntrans
             op.diriterate(macro, args.all)
-            print ntt
+            print(ntt)
 
             cm.nttplot(ntt, log=True)
 
@@ -294,7 +294,7 @@ if __name__=='__main__':
         #cm.plotnghosts(timeline, nghosts)
 
         # count n cells
-        timeline, n_cells = map(int, sen.timeline), sen.n_cells
+        timeline, n_cells = list(map(int, sen.timeline)), sen.n_cells
 
         cm.growthexp(timeline, n_cells)
 
@@ -332,8 +332,8 @@ if __name__=='__main__':
     ## additional commands for testing
 
     def testconfiguration():
-        print args.k
-        print args.active_types
+        print((args.k))
+        print((args.active_types))
 
     if args.subcommand == 'test':
         testconfiguration()

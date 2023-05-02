@@ -72,7 +72,7 @@ class SimRun:
 		geometries={'sphere':GeometrySphere,'plane':GeometryPlane,'plane_periodic':GeometryPeriodicPlane,'none':Geometry,'tube':GeometryTube,'peanut':GeometryPeanut,'hourglass':GeometryHourglass}
 		# Create the right geometry environment (TBC):
 		self.geom=geometries[self.param.constraint](self.param)
-		print self.geom
+		print(self.geom)
 		# Number of files that we are dealing with
 		self.Nsnap=len(files)
 		# Find out if this is a simulation with a variable number of particles:
@@ -89,13 +89,13 @@ class SimRun:
 			self.monodisperse=True
 		else:
 			if self.param.pot_params['use_particle_radii']==True:
-				print "Reading radii from initial file!"
+				print("Reading radii from initial file!")
 				data_ini=ReadData(directory+radiusfile)
 				self.monodisperse=False
 				self.radius=data_ini.data[data_ini.keys['radius']]
 				if self.Nvariable==False:
 					self.N=len(self.radius)
-					print "Constant number of " + str(self.N) + " particles!"
+					print("Constant number of " + str(self.N) + " particles!")
 			else:
 				self.monodisperse=True
 		# Unfortunately, need a first read-through to gauge what kind of data size we need
@@ -111,19 +111,19 @@ class SimRun:
 				 #print self.Nval[u]	
 				 u+=1
 			self.N=int(np.amax(self.Nval))
-			print "Handling a total of maximum " + str(self.N) + " particles!"
+			print("Handling a total of maximum " + str(self.N) + " particles!")
 		elif self.monodisperse:
 			data = ReadData(files[0])
 			x= np.array(data.data[data.keys['x']])
 			self.N=len(x)
-			print "Constant number of " + str(self.N) + " particles!"
+			print("Constant number of " + str(self.N) + " particles!")
 		if tracer:
 			data = ReadData(files[0])
 			tp=np.array(data.data[data.keys['type']])
 			tracers = [index for index,value in enumerate(tp) if value==2]
-			print tracers
+			print(tracers)
 			self.Ntracer=len(tracers)
-			print "Tracking " + str(self.Ntracer) + " tracer particles!"
+			print("Tracking " + str(self.Ntracer) + " tracer particles!")
 		# Produce empty arrays for initialization
 		self.rval=np.zeros((self.Nsnap,self.N,3))
 		self.vval=np.zeros((self.Nsnap,self.N,3))
@@ -138,24 +138,24 @@ class SimRun:
 			self.vtracers=np.zeros((self.Nsnap,self.Ntracer,3))
 		u=0
 		for f in files:
-			print "Processing file : ", f
+			print("Processing file : ", f)
 			data = ReadData(f)
 			x, y, z = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
 			vx, vy, vz = np.array(data.data[data.keys['vx']]), np.array(data.data[data.keys['vy']]), np.array(data.data[data.keys['vz']])
 			#if data.keys.has_key('nx'):
 			#	nx, ny, nz = np.array(data.data[data.keys['nx']]), np.array(data.data[data.keys['ny']]), np.array(data.data[data.keys['nz']])	
-			if data.keys.has_key('flag'):
+			if 'flag' in data.keys:
 				fl = data.data[data.keys['flag']]
 				if self.Nvariable:
 					self.flag[u,:self.Nval[u]]=fl
 				else:
 					self.flag[u,:]=fl
-			if data.keys.has_key('type'):
+			if 'type' in data.keys:
 				tp = data.data[data.keys['type']]
 				if tracer:
 					tracers = [index for index,value in enumerate(tp) if value==2]
 					self.tracers[u,:]=tracers
-			if data.keys.has_key('radius'):
+			if 'radius' in data.keys:
 				rad=data.data[data.keys['radius']]
 				if self.Nvariable:
 					self.radius[u,:self.Nval[u]]=rad
@@ -181,13 +181,13 @@ class SimRun:
 		if self.takeDrift:
 			self.drift=np.zeros((self.Nsnap,3))
 			if self.Nvariable:
-				print "Variable N: Taking off the drift is meaningless. Doing nothing."
+				print("Variable N: Taking off the drift is meaningless. Doing nothing.")
 			else:	
 				for u in range(1,self.Nsnap):
 					 dr=self.geom.ApplyPeriodic2d(self.rval[u,:,:]-self.rval[u-1,:,:])
 					 drift0=np.sum(dr,axis=0)/self.N
 					 self.drift[u,:]=self.drift[u-1,:]+drift0
-					 print self.drift[u,:]
+					 print(self.drift[u,:])
 			  
 		
 	def getMSD(self,verbose=True):
@@ -202,7 +202,7 @@ class SimRun:
 					else:
 						self.msd[u]=np.sum(np.sum(np.sum((self.rtracers[u:,:,:]-self.rtracers[:smax,:,:])**2,axis=2),axis=1),axis=0)/(self.Ntracer*smax)
 				else:
-					print "Sorry: MSD for dividing particles is ambiguous and currently not implemented!"
+					print("Sorry: MSD for dividing particles is ambiguous and currently not implemented!")
 			else:
 				# Drift is only meaningful here
 				#print "Doing the non-tracer MSD: this may take some time"
@@ -245,7 +245,7 @@ class SimRun:
 					else:
 						SelfInt[u]=np.sum(np.sum(np.exp(1.0j*qval[0]*(-self.rtracers[:smax,:,0]+self.rtracers[u:,:,0])+1.0j*qval[1]*(-self.rtracers[:smax,:,1]+self.rtracers[u:,:,1])+1.0j*qval[2]*(-self.rtracers[:smax,:,2]+self.rtracers[u:,:,2])),axis=1),axis=0)/(self.Ntracer*smax)
 				else:
-					print "Sorry: Self-intermediate scattering function for dividing particles is ambiguous and currently not implemented!"
+					print("Sorry: Self-intermediate scattering function for dividing particles is ambiguous and currently not implemented!")
 			else:
 				if self.geom.periodic:
 					SelfInt[u]=np.sum(np.sum(np.exp(1.0j*qval[0]*(self.geom.ApplyPeriodicX(-self.rval[:smax,:,0]+self.rval[u:,:,0]))+1.0j*qval[1]*(self.geom.ApplyPeriodicY(-self.rval[:smax,:,1]+self.rval[u:,:,1]))+1.0j*qval[2]*(self.geom.ApplyPeriodicZ(-self.rval[:smax,:,2]+self.rval[u:,:,2]))),axis=1),axis=0)/(self.N*smax)
@@ -268,10 +268,10 @@ class SimRun:
 	def FourierTrans(self,whichframe,qmax=0.3,verbose=True):
 		# Note to self: only low q values will be interesting in any case. 
 		# The stepping is in multiples of the inverse box size. Assuming a square box.
-		print "Fourier transforming positions"
+		print("Fourier transforming positions")
 		dq=1.0/self.geom.Lx
 		nq=int(qmax/dq)
-		print "Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
 		fourierval=np.zeros((nq,nq),dtype=complex)
 		for kx in range(nq):
@@ -326,15 +326,15 @@ class SimRun:
 		dq=1.0/self.geom.Lx
 		nq=int(qmax/dq)
 		if nq>nmax:
-			print "Coarsening q interval to reduce computational load"
+			print("Coarsening q interval to reduce computational load")
 			nq=nmax
 			dq=qmax/nq
 		nq2=int(2**0.5*nq)
-		print "Stepping space Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping space Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		dom=1.0/(self.Nsnap*self.param.dt*self.param.dump['freq'])
 		nom1=int(omegamax/dom)
 		nom=2*int(omegamax/dom)+1
-		print "Stepping time Fourier transform with step " + str(dom)+ ", resulting in " + str(nom)+ " steps."
+		print("Stepping time Fourier transform with step " + str(dom)+ ", resulting in " + str(nom)+ " steps.")
 		# Formally: S(q,omega) = 1/N int dt \rho_q(t) \rho*_q(0) e^i\omega t, where \rho_q(t) = \int dr \rho(r,t) e^iq r
 		# The second part is what we already had for the positional static structure factor
 		# For simplicity reasons, do the radial averaging before taking the time transform
@@ -342,7 +342,7 @@ class SimRun:
 		rhorad=np.zeros((self.Nsnap,nq2),dtype=complex)
 		for u in range(self.Nsnap):
 			if (u%10==0):
-				print u
+				print(u)
 			fourierval=np.empty((nq,nq),dtype=complex)
 			for kx in range(nq):
 				for ky in range(nq):
@@ -362,7 +362,7 @@ class SimRun:
 		for no in range(0,nom):
 			omega[no]=(-nom1+no)*dom
 			DynStruct[no,:]=np.einsum('ij,i', rhocorr, np.exp(1j*omega[no]*tval))
-		print omega
+		print(omega)
 		# OK, what have we got? Take the absolute value and look
 		PlotDynStruct=np.real(DynStruct)**2+np.imag(DynStruct)**2
 		if verbose:
@@ -401,16 +401,16 @@ class SimRun:
 		dq=1.0/self.geom.Lx
 		nq=int(qmax/dq)
 		if nq>nmax:
-			print "Coarsening q interval to reduce computational load"
+			print("Coarsening q interval to reduce computational load")
 			nq=nmax
 			dq=qmax/nq
 		nq2=int(2**0.5*nq)
-		print "Stepping space Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping space Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
 		FourPoint=np.zeros((nq2,self.Nsnap))
 		for u in range(self.Nsnap):
 			if (u%10==0):
-				print u
+				print(u)
 			smax=self.Nsnap-u
 			if self.Nvariable:
 				if self.tracer:
@@ -441,7 +441,7 @@ class SimRun:
 					# Should be real at that point
 					FourPoint[:,u]=np.real(np.sum(fourierrad*np.conjugate(fourierrad),axis=1))/(self.Ntracer*smax)
 				else:
-					print "Sorry: Four point function for dividing particles is ambiguous and currently not implemented!"
+					print("Sorry: Four point function for dividing particles is ambiguous and currently not implemented!")
 			else:
 				# First filter out the particles we are dealing with: only those that have moved less than distance a
 				#print "before distances"
@@ -487,10 +487,10 @@ class SimRun:
 	def FourierTransVel(self,whichframe,qmax=0.3,verbose=True):
 		# Note to self: only low q values will be interesting in any case. 
 		# The stepping is in multiples of the inverse box size. Assuming a square box.
-		print "Fourier transforming velocities"
+		print("Fourier transforming velocities")
 		dq=1.0/self.geom.Lx
 		nq=int(qmax/dq)
-		print "Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps."
+		print("Stepping Fourier transform with step " + str(dq)+ ", resulting in " + str(nq)+ " steps.")
 		qx, qy, qrad, ptsx, ptsy=self.makeQrad(dq,qmax,nq)
 		fourierval=np.zeros((nq,nq,2),dtype=complex)
 		for kx in range(nq):
@@ -526,7 +526,7 @@ class SimRun:
 	def getVelcorrSingle(self,whichframe,dx,xmax,verbose=True):
 		# start with the isotropic one - since there is no obvious polar region
 		# and n is not the relevant variable, and v varies too much
-		print "Velocity correlation function for frame " + str(whichframe)
+		print("Velocity correlation function for frame " + str(whichframe))
 		npts=int(round(xmax/dx))
 		bins=np.linspace(0,xmax,npts)
 		velcorr=np.zeros((npts,))
@@ -557,16 +557,16 @@ class SimRun:
 		# and n is not the relevant variable, and v varies too much
 		rangebin=0.5*np.sqrt(self.param.lx**2+self.param.ly**2)
 		npts=int(round(rangebin/dx))
-		print npts
+		print(npts)
 		bins=np.linspace(0,rangebin,npts)
 		velcorr=np.zeros((npts,))
 		velav=np.zeros((self.Nsnap,3))
 		for u in range(self.Nsnap):
-			print "snapshot " + str(u)
+			print("snapshot " + str(u))
 			velcount=np.zeros((npts,))
 			velcorr0=np.zeros((npts,))
 			velav[u,:]=np.sum(self.vval[u,:,:],axis=0)/self.N
-			print "Average velocity: ", velav[u,:]
+			print("Average velocity: ", velav[u,:])
 			for k in range(self.N):
 				vdot=np.sum(self.vval[u,k,:]*self.vval[u,:,:],axis=1)
 				dr=self.geom.GeodesicDistance12(self.rval[u,k,:],self.rval[u,:,:])
@@ -594,7 +594,7 @@ class SimRun:
 	# I am *not* removing any dreaded rattlers, because they should be part of the whole thing. 
 	def projectModes(self,Hessian):
 		if self.Nvariable:
-			print "Hessians and dividing particles don't mix! Stopping here!"
+			print("Hessians and dividing particles don't mix! Stopping here!")
 			self.proj=0
 			self.projv=0
 		else:

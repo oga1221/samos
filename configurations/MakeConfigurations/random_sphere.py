@@ -85,11 +85,11 @@ class Sphere:
       p.n = n
  
   def set_lens(self,lens):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].l = lens[i]
       
   def set_particle_radius(self,radii):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].R = radii[i]
       
   def write(self,outfile, include_len = False):
@@ -124,27 +124,27 @@ parser.add_argument("--include_len", action="store_true", help="include rod leng
 parser.add_argument("--make_rods", action="store_true", help="make rods (otherwise make spherical particles)")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random spherical configuration"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random spherical configuration")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
 V = 4.0*args.radius**2*pi
 if args.make_rods:
   part_area = args.rod_rad*(2*args.length + pi*args.rod_rad)
 else:
   part_area = pi*args.rod_rad**2
 N = int(round(args.phi*V/part_area))
-print "\tRadius : ", args.radius
-print "\tPacking fraction : ", args.phi
-print "\tAverage velocity : ", args.vavr
-print "\tTotal number of particles : ", N
-print "\tOutput file : ", args.output
-print 
+print("\tRadius : ", args.radius)
+print("\tPacking fraction : ", args.phi)
+print("\tAverage velocity : ", args.vavr)
+print("\tTotal number of particles : ", N)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 
@@ -160,8 +160,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

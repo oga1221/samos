@@ -122,14 +122,14 @@ class TrackDefects:
 	    ismhalf=[index for index,value in enumerate(charge) if value==-0.5]
 	    isone=[index for index,value in enumerate(charge) if value==1.0]
 	    if verbose:
-		print len(ishalf)
-		print len(ismhalf)
-		print len(isone)
+		print(len(ishalf))
+		print(len(ismhalf))
+		print(len(isone))
 	    # See if anything is left over:
 	    ntypical=len(ishalf)+len(ismhalf)+len(isone)
 	    if (ndef-ntypical)>0:
-		print "There are " + str(ndef-ntypical) + " unusual defects in snapshot " + str(u)
-		print charge
+		print("There are " + str(ndef-ntypical) + " unusual defects in snapshot " + str(u))
+		print(charge)
 	    # Check if we are in one of two common scenarious: a) 4 +1/2 defects; or b) 2 +1 defects
 	    if len(ishalf)==4:
 		rvalhalf0.append(rval[ishalf,:])
@@ -139,23 +139,23 @@ class TrackDefects:
 		self.track2.append(u)
 	    if verbose:
 		if (len(ishalf)!=4) and (len(isone)!=2):
-		    print u
-		    print "# of 1/2 defects: " + str(len(ishalf))
-		    print "# of -1/2 defects: " + str(len(ismhalf))
-		    print "# of 1 defects: " + str(len(isone))
+		    print(u)
+		    print("# of 1/2 defects: " + str(len(ishalf)))
+		    print("# of -1/2 defects: " + str(len(ismhalf)))
+		    print("# of 1 defects: " + str(len(isone)))
 	
 	# Sort out the tracks if possible
 	# If we have a substantial set of snapshots where there were 4 +1/2 defects
 	if len(self.track4)>0.25*len(self.defects1):
 	    #trackFourDefects(rvalhalf0,track4,ax,polar)
 	    self.isFour=True
-	    print "Detected a predominantly four defect structure! Tracking!"
+	    print("Detected a predominantly four defect structure! Tracking!")
 	    self.trackFourDefects(rvalhalf0)
 	# If we have a substantial set of snapshots where there are 2 +1 defects
 	if len(self.track2)>0.25*len(self.defects1):
 	    #trackTwoDefects(rvalone0,track2,ax,polar)
 	    self.isBand=True
-	    print "Detected a predominantly band structure! Tracking!"
+	    print("Detected a predominantly band structure! Tracking!")
 	    self.trackTwoDefects(rvalone0)
 	# In case this is not true, but we want to still attempt to really, really track stuff
 	# This will do the whole hog and go for all identifiable defect traces
@@ -303,7 +303,7 @@ class TrackDefects:
 	self.defects1=[]
 	for u in range(len(self.ndefects)):
 	    if verbose:
-		print "Working on snapshot " + str(u)
+		print("Working on snapshot " + str(u))
 	    # Dig out defects, associate position, charge and angles
 	    ndef=len(self.defects[u])
 	    charge0=[]
@@ -316,7 +316,7 @@ class TrackDefects:
 	    # The old fashioned language here is because I don't want to encounter pairs twice
 	    # that just makes trouble ...
 	    if verbose:
-		print charge0
+		print(charge0)
 	    close=[]
 	    for n in range(ndef):
 		for m in range(n+1,ndef):
@@ -328,7 +328,7 @@ class TrackDefects:
 		charge=list(charge0)
 	    else:
 		if verbose:
-		    print close
+		    print(close)
 		# need to do a cluster merge on close ones (mostly 3s)
 		# Newman-Ziff like ... kind of
 		# Make every defect the root of a cluster of size 1
@@ -341,7 +341,7 @@ class TrackDefects:
 		    else:
 			pointer[pair[0]]=pointer[pair[1]]
 		if verbose:
-		    print pointer
+		    print(pointer)
 		# Now recursively relabel pointers and sizes. 
 		# Loop over all defects
 		for k1 in range(ndef):
@@ -354,8 +354,8 @@ class TrackDefects:
 		      size[k1]=0
 		      pointer[k1]=k2     
 		if verbose:
-		    print pointer
-		    print size
+		    print(pointer)
+		    print(size)
 		# reconstructing my list grouped by clusters now
 		rval=[]
 		charge=[]
@@ -372,7 +372,7 @@ class TrackDefects:
 			    rval.append(newr0)
 			    charge.append(newcharge)
 		if verbose:
-		    print charge
+		    print(charge)
 	    self.ndefects1.append(len(charge))
 	    self.defects1.append([])
 	    for n in range(self.ndefects1[u]):

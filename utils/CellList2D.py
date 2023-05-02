@@ -45,10 +45,10 @@ class Cell:
     self.indices.append(idx)
     
   def printMe(self):
-    print "I am cell " + str(self.idx)
-    print "My position is: " + str(self.r)
-    print "My particles are: " + str(self.indices)
-    print "My neighbour cells are: " + str(self.neighbors)
+    print("I am cell " + str(self.idx))
+    print("My position is: " + str(self.r))
+    print("My particles are: " + str(self.indices))
+    print("My neighbour cells are: " + str(self.neighbors))
     
   
 class CellList2D:
@@ -63,7 +63,7 @@ class CellList2D:
     self.dy = self.Ly/float(self.ny)
     # total number of cells
     n_cell = self.nx*self.ny
-    print "Created CellList with " + str(n_cell) + " squares."
+    print("Created CellList with " + str(n_cell) + " squares.")
     # Cell list is a python list
     self.cell_list = [None for i in range(n_cell)]
     for i in range(self.nx):

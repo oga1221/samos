@@ -36,13 +36,13 @@ class ReadFaces:
       
   def __read_data(self):
 	lines = self.lines.split('\n')
-	lines = map(lambda x: x.strip(), lines)
+	lines = [x.strip() for x in lines]
 	self.Nfaces = len(lines)
 	# No keys here, just connections
 	self.Faces = []
 	i=0
 	for line in lines:
-	  data_line = map(int, line.split())
+	  data_line = list(map(int, line.split()))
 	  #print data_line[1:]
 	  self.Faces.append(data_line[1:])
 	

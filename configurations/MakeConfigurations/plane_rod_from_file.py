@@ -55,10 +55,10 @@ class Plane:
     min_x, max_x = np.min(data[:,0]), np.max(data[:,0])
     min_y, max_y = np.min(data[:,1]), np.max(data[:,1])
     self.Lx, self.Ly = max_x - min_x, max_y - min_y
-    print "Lx = ", self.Lx
-    print "Ly = ", self.Ly
+    print("Lx = ", self.Lx)
+    print("Ly = ", self.Ly)
     self.N = data.shape[0]
-    self.particles = [Particle(i) for i in xrange(self.N)]
+    self.particles = [Particle(i) for i in range(self.N)]
     for i in range(self.N):
       x, y, nx, ny = data[i]
       self.particles[i].r = [x-0.5*self.Lx,y-0.5*self.Ly,0.0]
@@ -71,15 +71,15 @@ class Plane:
       p.v = [vav*cos(phi),vav*sin(phi),0.0]
   
   def set_radius(self,radii):
-    for i in xrange(len(radii)):
+    for i in range(len(radii)):
       self.particles[i].R = radii[i]
   
   def set_type(self,types):
-    for i in xrange(len(types)):
+    for i in range(len(types)):
       self.particles[i].tp = types[i]
   
   def set_lens(self,lens):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].l = lens[i]
   
   def write(self,outfile):
@@ -104,18 +104,18 @@ parser.add_argument("-l", "--laspect",  type=float, default=4.0, help="aspect ra
 args = parser.parse_args()
 
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014, 2015"
-print "\t----------------------------------------------"
-print 
-print "\tinput file : ", args.input
-print "\tAverage velocity : ", args.vavr
-print "\tOutput file : ", args.output
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014, 2015")
+print("\t----------------------------------------------")
+print() 
+print("\tinput file : ", args.input)
+print("\tAverage velocity : ", args.vavr)
+print("\tOutput file : ", args.output)
 start = datetime.now()
 
 random_orinet = True
@@ -125,15 +125,15 @@ random_orinet = True
 p = Plane(args.input, args.vavr)
 # unscaled particle area based on the aspect ratio -- rescale for proper packing fraction
 part_area = 1.0*(2.0*(args.laspect-1.0) + pi)
-print part_area
+print(part_area)
 part_real = p.Lx*p.Ly*args.phi/p.N
-print part_real
+print(part_real)
 rescale=np.sqrt(part_real/part_area)
-print rescale
+print(rescale)
 radii = []
 types = []
 lens = []
-for i in xrange(len(p.particles)):
+for i in range(len(p.particles)):
     radii.append(rescale)
     types.append(1)
     lens.append(rescale*2.0*args.laspect)
@@ -146,6 +146,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

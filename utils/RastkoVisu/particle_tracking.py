@@ -48,19 +48,19 @@ parser.add_argument("-s", "--skip", type=int, default=0, help="skip this many sa
 parser.add_argument("-n", "--id", type=int, default=0, help="id of the particle to track")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tTrajectory of each particle"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tTrajectory of each particle")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
+print()
 
 start = datetime.now()
 
@@ -88,7 +88,7 @@ nnz = []
 op = []
 idx = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   timestep = int(f.split('_')[-1].split('.')[0])
   
@@ -153,8 +153,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

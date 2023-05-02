@@ -32,20 +32,20 @@ parser.add_argument("-o", "--output", type=str, help="output file")
 parser.add_argument("-d", "--distance", type=str, default=None, help="file with interparticle distances")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tConverts dat files to VTK files"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tConverts dat files to VTK files")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
 if args.distance != None:
-  print "\tReading distances to 0th particle from : ", args.distance
-print
+  print("\tReading distances to 0th particle from : ", args.distance)
+print()
 
 start = datetime.now()
 
@@ -59,11 +59,11 @@ dist = []
 if args.distance != None:
   distinp = open(args.distance,'r')
   dist = distinp.readlines()
-  dist = map(lambda x: x.strip(),dist)
-  dist = map(float,dist)
+  dist = [x.strip() for x in dist]
+  dist = list(map(float,dist))
   distinp.close()
 
-if not (data.keys.has_key('x') and data.keys.has_key('y') and data.keys.has_key('z')):
+if not ('x' in data.keys and 'y' in data.keys and 'z' in data.keys):
   raise "Particle coordinate not specified in the input data."
 
 x = np.array(data.data[data.keys['x']])
@@ -72,7 +72,7 @@ z = np.array(data.data[data.keys['z']])
 
 data_to_print = {}
 
-if (data.keys.has_key('vx') or data.keys.has_key('vy') or data.keys.has_key('vz')):
+if ('vx' in data.keys or 'vy' in data.keys or 'vz' in data.keys):
   vx = np.array(data.data[data.keys['vx']])
   vy = np.array(data.data[data.keys['vy']])
   vz = np.array(data.data[data.keys['vz']])
@@ -81,7 +81,7 @@ if (data.keys.has_key('vx') or data.keys.has_key('vy') or data.keys.has_key('vz'
   data_to_print['vz'] = vz
   has_v = True
 
-if (data.keys.has_key('nx') or data.keys.has_key('ny') or data.keys.has_key('nz')):
+if ('nx' in data.keys or 'ny' in data.keys or 'nz' in data.keys):
   nx = np.array(data.data[data.keys['nx']])
   ny = np.array(data.data[data.keys['ny']])
   nz = np.array(data.data[data.keys['nz']])
@@ -108,7 +108,7 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
   

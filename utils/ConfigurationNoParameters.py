@@ -52,7 +52,7 @@ class Interaction:
 class Configuration:
 	def __init__(self,filename,constraint,box):
 		geometries={'sphere':GeometrySphere,'plane':GeometryPlane,'plane_periodic':GeometryPeriodicPlane,'none':Geometry,'tube':GeometryTube,'peanut':GeometryPeanut,'hourglass':GeometryHourglass}
-		print "Processing file : ", filename
+		print("Processing file : ", filename)
 		data = ReadData(filename)
 		x, y, z = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
                 try:
@@ -65,7 +65,7 @@ class Configuration:
 			nx, ny, nz = np.zeros(np.shape(x)),np.zeros(np.shape(y)),np.zeros(np.shape(z))
 		self.monodisperse=False
 		self.N=len(x)
-		if not data.keys.has_key('radius'): 
+		if 'radius' not in data.keys: 
 			# MISSING: read them in from the initial configuration
 			self.radius = np.array([1.0 for i in range(self.N)])
 			self.monodisperse=True
@@ -73,11 +73,11 @@ class Configuration:
 		else: 
 			self.radius = np.array(data.data[data.keys['radius']])	
 			self.sigma = np.mean(self.radius)
-		if data.keys.has_key('type'):
+		if 'type' in data.keys:
 			self.ptype = data.data[data.keys['type']]
 		else:
 			self.ptype = np.ones((self.N,))
-		if data.keys.has_key('flag'):
+		if 'flag' in data.keys:
 			self.flag = data.data[data.keys['flag']]
 		self.rval = np.column_stack((x,y,z))
 		self.vval = np.column_stack((vx,vy,vz))
@@ -86,7 +86,7 @@ class Configuration:
 		param=Param(box)
 		self.geom=geometries[constraint](param)
 		self.inter=Interaction()
-		print self.geom
+		print(self.geom)
 		
 		if self.geom.periodic:
 			# Apply periodic geomtry conditions just in case (there seem to be some rounding errors floating around)
@@ -126,7 +126,7 @@ class Configuration:
 		cellsize=self.param.nlist_rcut
 		if cellsize>5*self.inter.sigma:
 			cellsize=5*self.inter.sigma
-			print "Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!"
+			print("Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!")
 		self.clist=CellList(self.geom,cellsize)
 		# Populate it with all the particles:
 		for k in range(self.N):
@@ -176,8 +176,8 @@ class Configuration:
 		# The order parameter with v_0 still in it. Normalize in final polish
 		orderparV=np.sum(vval,axis=0)/len(vval)
 		orderpar=np.sum(nval,axis=0)/len(nval)
-		print orderpar
-		print orderparV
+		print(orderpar)
+		print(orderparV)
 		direction = orderpar/np.linalg.norm(orderpar)
 		directionV = orderparV/np.linalg.norm(orderparV)
 		axisorth= np.cross(direction,directionV)
@@ -187,8 +187,8 @@ class Configuration:
 		axisnorm=np.cross(ez,directionV)
 		axisnorm/=np.linalg.norm(axisnorm)
 		
-		print directionV
-		print axisorth
+		print(directionV)
+		print(axisorth)
 		
 		vel = np.sqrt(self.vval[:,0]**2 + self.vval[:,1]**2 + self.vval[:,2]**2)
 		velnorm=((self.vval).transpose()/(vel).transpose()).transpose()
@@ -201,7 +201,7 @@ class Configuration:
 				ax = fig.add_subplot(111, projection='3d')
 				ax.scatter(rval[:,0], rval[:,1], rval[:,2], zdir='z', c='b')
 			else:
-				print 'Error: Matplotlib does not exist on this machine, cannot plot system'
+				print('Error: Matplotlib does not exist on this machine, cannot plot system')
 			
 		return [vel_av,alpha,direction,directionV,orderpar,orderparV]
 	

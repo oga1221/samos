@@ -7,7 +7,7 @@ from numpy.linalg import norm
 # take a dictionary of matrices and decompose them into eigenvalues/vectors
 def decompose(tdict):
     evalues, evectors = {}, {}
-    for i, t in tdict.items():
+    for i, t in list(tdict.items()):
         evalues[i], evectors[i] = eig(t)
     return evalues, evectors
 
@@ -50,7 +50,7 @@ class TransAnalyse(object):
         if tlist:
             self.transitions = tlist.completed
         else:
-            print 'Warning. No tlist object passed to TransAnalyse'
+            print('Warning. No tlist object passed to TransAnalyse')
 
     def structure_alignment(self, outnum):
         # For constant shape index across cells expect that principle stress aligns closely with
@@ -64,7 +64,7 @@ class TransAnalyse(object):
         virvalues = np.zeros((ll, 2)); virvectors = np.zeros((ll, 2, 2))
         texvalues = np.zeros((ll, 2)); texvectors= np.zeros((ll,2, 2))
 
-        tkeys = texture.keys()
+        tkeys = list(texture.keys())
         for i, vstress in enumerate(vir.values()):
             virvalues[i], virvectors[i] = eig(vstress[:2,:2])
             texvalues[i], texvectors[i] = eig(texture[tkeys[i]][:2,:2])
@@ -74,14 +74,14 @@ class TransAnalyse(object):
 
         aterms = palign(pvv, texvv, nematic=True)
         aterm =np.mean(aterms)
-        print 'alignment'
-        print aterm
+        print('alignment')
+        print(aterm)
 
     def transition_alignment(self):
         # T1 transitions are aligned along regions of high *local* stress
 
         for tone in self.transitions:
-            print tone.get_orient()
+            print((tone.get_orient()))
 
 ### originally in Analyse_cells.py
 
@@ -121,7 +121,7 @@ class Tone(object):
         firstflip = self.flipstamp[0]
         lastflip = self.flipstamp[-1]
         # find the time step before the first transition
-        timeline = helist.keys()
+        timeline = list(helist.keys())
         prior =timeline[timeline.index(firstflip)-1]
         pvprior = helist[prior]
         pvafter = helist[lastflip]
@@ -137,7 +137,7 @@ class Tone(object):
 
 # invert a dictionary
 def invert(dct):
-    return dict([(v,k) for k,v in dct.items()])
+    return dict([(v,k) for k,v in list(dct.items())])
 
 #import collections.abc.MutableSequence as MutableSequence
 import collections
@@ -188,8 +188,8 @@ class Tlist(collections.MutableMapping):
     # helper methods for the populate and update functions
     @staticmethod
     def _find_short(pv):
-        lls = sorted(pv.mesh.lle.items(), key= lambda t: t[1])
-        eids, llen = zip(*lls)
+        lls = sorted(list(pv.mesh.lle.items()), key= lambda t: t[1])
+        eids, llen = list(zip(*lls))
         #short = eids[:bisect.bisect_left(llen, Tlist.ttrack)]
         short = eids
 
@@ -210,7 +210,7 @@ class Tlist(collections.MutableMapping):
     def _maketovpair(pv):
         #dual_to_tri = invert(pv.tri.to_mesh_edge)
         dual_to_tri = pv.mesh.dual_to_tri
-        return dict([(eid, pv.tri.getvpair(teid)) for eid, teid in dual_to_tri.items()])
+        return dict([(eid, pv.tri.getvpair(teid)) for eid, teid in list(dual_to_tri.items())])
 
     # constructor which takes pv object
     @classmethod
@@ -220,11 +220,11 @@ class Tlist(collections.MutableMapping):
         # dual to tri edges
         tovpair = cls._maketovpair(pv)
         lst = dict(enumerate([Tone(tovpair[eid], outnum) for eid in short]))
-        byvids = dict([(tone.vids, i) for i, tone in lst.items()])
+        byvids = dict([(tone.vids, i) for i, tone in list(lst.items())])
         #for vids, i in byvids.items():
             #tone.update_edl(outnum, tri.lle[eid])
 
-        print 'started tracking {} edges'.format(len(lst))
+        print(('started tracking {} edges'.format(len(lst))))
         tt = cls(lst)
 
         tt.last_tovpair = tovpair
@@ -279,12 +279,12 @@ class Tlist(collections.MutableMapping):
             tt.flip(vpair, outnum)
        
         # resolve edges which aren't short anymore
-        for tone in self.lst.values():
+        for tone in list(self.lst.values()):
             #tmp 
             try:
                 hehid = tri.vedge[tuple(tone.vids)]
             except KeyError:
-                print 'dropped a tone object'
+                print('dropped a tone object')
                 self.remove(tone.vids)
                 continue
             el = tri.ll[hehid]
@@ -300,10 +300,10 @@ class Tlist(collections.MutableMapping):
         newshort = set(shortpairs) - set(newvids)
         #find the ones we aren't tracking yet
         untracked= newshort - set(self.byvids.keys())
-        print 'transitions', self.nt
-        print 'untracked', len(untracked)
-        print 'unaccounted', len(unaccounted)
-        print 'tracking', len(self.lst)
+        print(('transitions', self.nt))
+        print(('untracked', len(untracked)))
+        print(('unaccounted', len(unaccounted)))
+        print(('tracking', len(self.lst)))
         # track any short edges
         for i, vpair in enumerate(untracked):
             self.append(Tone(vpair, outnum))

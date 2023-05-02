@@ -33,7 +33,7 @@ class Configuration:
 		# Outdated list of geometries
 		#geometries={'sphere':GeometrySphere,'plane':GeometryPeriodicPlane,'none':Geometry,'tube':GeometryTube,'peanut':GeometryPeanut,'hourglass':GeometryHourglass}
 		geometries={'sphere':GeometrySphere,'plane':GeometryPlane,'plane_periodic':GeometryPeriodicPlane,'none':Geometry,'tube':GeometryTube,'peanut':GeometryPeanut,'hourglass':GeometryHourglass}
-		print "Processing file : ", filename
+		print("Processing file : ", filename)
 		data = ReadData(filename)
 		x, y, z = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
 		vx, vy, vz = np.array(data.data[data.keys['vx']]), np.array(data.data[data.keys['vy']]), np.array(data.data[data.keys['vz']])
@@ -43,7 +43,7 @@ class Configuration:
 			nx, ny, nz = np.zeros(np.shape(x)),np.zeros(np.shape(y)),np.zeros(np.shape(z))
 		self.monodisperse=False
 		self.N=len(x)
-		if not data.keys.has_key('radius'): 
+		if 'radius' not in data.keys: 
 			# MISSING: read them in from the initial configuration
 			self.radius = np.array([1.0 for i in range(self.N)])
 			self.monodisperse=True
@@ -51,18 +51,18 @@ class Configuration:
 		else: 
 			self.radius = np.array(data.data[data.keys['radius']])	
 			#self.sigma = np.mean(self.radius)
-		if data.keys.has_key('type'):
+		if 'type' in data.keys:
 			self.ptype = data.data[data.keys['type']]
 		else:
 			self.ptype = np.ones((self.N,))
-		if data.keys.has_key('flag'):
+		if 'flag' in data.keys:
 			self.flag = data.data[data.keys['flag']]
 		self.rval = np.column_stack((x,y,z))
 		self.vval = np.column_stack((vx,vy,vz))
 		self.nval = np.column_stack((nx,ny,nz))
 		# Create the right geometry environment (TBC):
 		self.geom=geometries[param.constraint](param)
-		print self.geom
+		print(self.geom)
 		# Create the Interaction class
 		self.inter=Interaction(self.param,self.radius,ignore)
 		
@@ -78,7 +78,7 @@ class Configuration:
 		cellsize=param.nlist_rcut
 		if cellsize>5*self.inter.sigma:
 			cellsize=5*self.inter.sigma
-			print "Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!"
+			print("Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!")
 		self.clist=CellList(self.geom,cellsize)
 		# Populate it with all the particles:
 		for k in range(self.N):
@@ -110,7 +110,7 @@ class Configuration:
 		cellsize=self.param.nlist_rcut
 		if cellsize>5*self.inter.sigma:
 			cellsize=5*self.inter.sigma
-			print "Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!"
+			print("Warning! Reduced the cell size to manageable proportions (5 times mean radius). Re-check if simulating very long objects!")
 		self.clist=CellList(self.geom,cellsize)
 		# Populate it with all the particles:
 		for k in range(self.N):
@@ -173,8 +173,8 @@ class Configuration:
 		# The order parameter with v_0 still in it. Normalize in final polish
 		orderparV=np.sum(vval,axis=0)/len(vval)
 		orderpar=np.sum(nval,axis=0)/len(nval)
-		print orderpar
-		print orderparV
+		print(orderpar)
+		print(orderparV)
 		direction = orderpar/np.linalg.norm(orderpar)
 		directionV = orderparV/np.linalg.norm(orderparV)
 		axisorth= np.cross(direction,directionV)
@@ -184,14 +184,14 @@ class Configuration:
 		axisnorm=np.cross(ez,directionV)
 		axisnorm/=np.linalg.norm(axisnorm)
 		
-		print directionV
-		print axisorth
+		print(directionV)
+		print(axisorth)
 		
 		vel = np.sqrt(self.vval[:,0]**2 + self.vval[:,1]**2 + self.vval[:,2]**2)
 		velnorm=((self.vval).transpose()/(vel).transpose()).transpose()
 		
 		eng, press,stress = self.compute_energy_and_pressure()
-		print np.shape(stress)
+		print(np.shape(stress))
 		# Project the stresses into the e,theta,phi components. The rr component hast to be 0, and the r cross components
 		# belong to the projection. So they are not all that interesting. 
 		# We want the theta theta, theta phi, phi theta ant phi phi components (implicitly testing symmetries ...)
@@ -200,7 +200,7 @@ class Configuration:
 		s_tp=np.sum(axisnorm*np.einsum('kij,j->ki',stress,directionV),axis=1)
 		s_pt=np.sum(directionV*np.einsum('kij,j->ki',stress,axisnorm),axis=1)
 		s_pp=np.sum(directionV*np.einsum('kij,j->ki',stress,directionV),axis=1)
-		print np.shape(s_tt)
+		print(np.shape(s_tt))
 		# Mean density really makes no sense? Determined by the initial conditions in periodic boundary conditions.
 		# I do not wish to set up artificial bins in a translationally invariant system
 		vel_av=np.mean(vel)
@@ -218,7 +218,7 @@ class Configuration:
 				ax = fig.add_subplot(111, projection='3d')
 				ax.scatter(rval[:,0], rval[:,1], rval[:,2], zdir='z', c='b')
 			else:
-				print 'Error: Matplotlib does not exist on this machine, cannot plot system'
+				print('Error: Matplotlib does not exist on this machine, cannot plot system')
 			
 		return [vel_av,eng_av,press_av,s_tt_av,s_tp_av,s_pt_av,s_pp_av,alpha,direction,directionV,orderpar,orderparV]
 	

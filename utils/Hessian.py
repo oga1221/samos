@@ -72,7 +72,7 @@ class Hessian:
                 
 	def makeMatrix(self,addRestoring=True,ksurf=10.0):
 		# This matrix is in principle 3N by 3N. We will have to be careful later on in throwing out extra off-surface modes
-		print "Hessian: Info - allocating the " + str(3*self.N) + " by " + str(3*self.N) + " Hessian matrix."
+		print("Hessian: Info - allocating the " + str(3*self.N) + " by " + str(3*self.N) + " Hessian matrix.")
 		self.Hessian=np.zeros((3*self.Nrigid,3*self.N))
 		# Construct it particle by particle (easiest way: everything here is always going to be N**2, no matter what, due to diagonalization algorithm)
 		# Follow the formula derived in my notes
@@ -83,17 +83,17 @@ class Hessian:
 		if (self.geom.manifold=='sphere'):
 			addCurvature=True
 			Rval=self.geom.R
-			print "Hessian: Calculating Hessian on a sphere!"
+			print("Hessian: Calculating Hessian on a sphere!")
 		elif (self.geom.manifold=='plane'):
-			print "Hessian: Calculating Hessian on a plane!"
+			print("Hessian: Calculating Hessian on a plane!")
 		else:
-			print "Hessian: Error: Hessian has not yet been implemented on " + self.geom.manifold + " manifolds!"  
+			print("Hessian: Error: Hessian has not yet been implemented on " + self.geom.manifold + " manifolds!")  
 		fsum=0.0
 		fav=0.0
 		for i in range(self.N):
 			if i not in self.rattlers:
 				if (i%200==0):
-					print i
+					print(i)
 				# get some of the constants that are necessary here:
 				neighbours, drvec, dr=self.conf.getNeighbours(i,self.inter.getMult(),self.inter.getDmax())
 				# contact normal vectors
@@ -176,8 +176,8 @@ class Hessian:
 				#print diagsquare
 				self.Hessian[3*i:(3*i+3),3*i:(3*i+3)]=-diagsquare
 		fav/=self.N
-		print "Hessian: Estimating distance from mechanical equilibrium of initial configuration "
-		print "Scaled force sum is " + str(fsum/fav)
+		print("Hessian: Estimating distance from mechanical equilibrium of initial configuration ")
+		print("Scaled force sum is " + str(fsum/fav))
 			
 	def getModes(self):
 		# Let's have a look if what we get is in any way reasonable
@@ -191,7 +191,7 @@ class Hessian:
 		#print HessianASym
 		# Use routines for hermitian eigenvector decomposition
 		# Default is ascending order, which suits us
-		print "Starting Diagonalisation!"
+		print("Starting Diagonalisation!")
 		self.eigval, self.eigvec = LA.eigh(HessianSym)
 		if self.debug:
 			# start with some debugging output
@@ -206,11 +206,11 @@ class Hessian:
                         wx[u]=np.sum(self.eigvec[0:3*self.N:3,u]**2)
                         wy[u]=np.sum(self.eigvec[1:3*self.N:3,u]**2)
                         wz[u]=np.sum(self.eigvec[2:3*self.N:3,u]**2)
-		print "The smallest eigenvalue is: " + str(np.amin(self.eigval))
-		print self.eigval
-		print wx
-		print wy
-		print wz
+		print("The smallest eigenvalue is: " + str(np.amin(self.eigval)))
+		print(self.eigval)
+		print(wx)
+		print(wy)
+		print(wz)
 		
 	def plotModes(self,omegamax=3.0,npts=100):
 		# Straight here: The projection ratios on the sphere/plane

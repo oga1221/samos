@@ -45,7 +45,7 @@ from vtk import *
 class PotEnergy:
   
   def __init__(self,data,box=None):
-    if not (data.keys.has_key('x') and data.keys.has_key('y') and data.keys.has_key('z')):
+    if not ('x' in data.keys and 'y' in data.keys and 'z' in data.keys):
       raise "Particle coordinate not specified in the input data."
     self.data = data
     self.box = box
@@ -53,7 +53,7 @@ class PotEnergy:
   def compute_harmonic(self, k = 1.0):
     eng = [0.0 for i in range(self.data.N)]
     X, Y, Z = self.data.data[self.data.keys['x']], self.data.data[self.data.keys['y']], self.data.data[self.data.keys['z']]
-    if not self.data.keys.has_key('r'): A = [1.0 for i in range(self.data.N)]
+    if 'r' not in self.data.keys: A = [1.0 for i in range(self.data.N)]
     else: A = self.data.data[self.data.keys['r']]
     idx = 0
     for (x0,y0,z0,a0) in zip(X,Y,Z,A):
@@ -120,7 +120,7 @@ class POVPrint:
     min_eng, max_eng = min(self.eng), max(self.eng)
     eng_range = max_eng - min_eng
     X, Y, Z = self.data.data[self.data.keys['x']], self.data.data[self.data.keys['y']], self.data.data[self.data.keys['z']]
-    if not self.data.keys.has_key('r'): R = [1.0 for i in range(self.data.N)]
+    if 'r' not in self.data.keys: R = [1.0 for i in range(self.data.N)]
     else: R = self.data.data[self.data.keys['r']]
     for (x,y,z,r,e) in zip(X,Y,Z,R,self.eng):
       tt = (e-min_eng)/eng_range
@@ -178,29 +178,29 @@ parser.add_argument("-l", "--box_size", type=float, default=None, help="Size of 
 parser.add_argument("-C", "--bond_cutoff", type=float, default=0.0, help="bond length cutoff distance")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tPotential energy distribution"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
-print "\tInput : ", args.input
-print "\tOutput : ", args.output
-print "\tLow colour : ", args.low_colour
-print "\tHi colour : ", args.hi_colour
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tPotential energy distribution")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
+print("\tInput : ", args.input)
+print("\tOutput : ", args.output)
+print("\tLow colour : ", args.low_colour)
+print("\tHi colour : ", args.hi_colour)
 if args.connectivity != None:
-  print "\tConnectivity file : ", args.connectivity
+  print("\tConnectivity file : ", args.connectivity)
 if args.box_size != None:
-  print "\tBox size : ", args.box_size
-print "\tBond cutoff distance : ", args.bond_cutoff
-print 
+  print("\tBox size : ", args.box_size)
+print("\tBond cutoff distance : ", args.bond_cutoff)
+print() 
 
 start = datetime.now()
 
-print "Reading data..."
+print("Reading data...")
 data = ReadData(args.input)
 if args.box_size == None:
   pot_eng = PotEnergy(data)
@@ -208,20 +208,20 @@ else:
   L = args.box_size
   pot_eng = PotEnergy(data,box=[L,L,L])
 
-print "Computing harmonic potential energy..."
+print("Computing harmonic potential energy...")
 engs = pot_eng.compute_harmonic(args.k)
 
-print "Generating POV Ray output..."
+print("Generating POV Ray output...")
 p = POVPrint(args.output+'.pov',data,engs)
 p.sphere_radius = args.sphere_r
 p.hi_colour = args.hi_colour
 p.low_colour = args.low_colour
 
-print "Generating XYZC output..."
+print("Generating XYZC output...")
 xyzc = XYZCPrint(args.output+'.xyzc',data,engs)
 xyzc.write()
 
-print "Generating VTP output..."
+print("Generating VTP output...")
 xx, yy, zz = np.array(data.data[data.keys['x']]), np.array(data.data[data.keys['y']]), np.array(data.data[data.keys['z']])
 
 Points = vtk.vtkPoints()
@@ -243,7 +243,7 @@ polydata.SetPoints(Points)
 polydata.GetPointData().SetScalars(PotEngs)
 
 if args.bond_cutoff != 0:
-  print "Computing particle connectivity network..."
+  print("Computing particle connectivity network...")
   Lengths = vtk.vtkDoubleArray()
   Lengths.SetNumberOfComponents(1)
   Lengths.SetName("BondLen")
@@ -277,22 +277,22 @@ writer.Write()
 nneigh = []
 if args.connectivity != None:
   nneigh = [0 for i in range(data.N)]
-  print "Generating connectivities..."
+  print("Generating connectivities...")
   con = open(args.connectivity,'r')
-  edges = [f for f in map(lambda x: int(x.strip()), con.readlines()) if f != -1]
-  edge_pairs = zip(edges[::2],edges[1::2])
+  edges = [f for f in [int(x.strip()) for x in con.readlines()] if f != -1]
+  edge_pairs = list(zip(edges[::2],edges[1::2]))
   for (i,j) in edge_pairs:
     nneigh[i-1] += 0.5
     nneigh[j-1] += 0.5
 
-print "Generating XYZ file for SRTIPACK triangulation..."
+print("Generating XYZ file for SRTIPACK triangulation...")
 out = open(args.output+'.xyz','w')
 for (x,y,z) in zip(xx,yy,zz):
   out.write('%f  %f  %f\n' % (x,y,z))
 out.close()
 
-print "Lowest energy : ", min(engs)
-print "Highest energy : ", max(engs)
+print("Lowest energy : ", min(engs))
+print("Highest energy : ", max(engs))
 
 p.write()
 
@@ -301,9 +301,9 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
  
 
     

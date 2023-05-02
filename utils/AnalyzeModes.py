@@ -43,9 +43,9 @@ args = parser.parse_args()
 params = Param(args.directory+args.conffile)
 files = sorted(glob(args.directory + args.input+'*.dat'))
 nfiles=len(files)
-print '----------------------------------------------------------------'
-print nfiles
-print args.number
+print('----------------------------------------------------------------')
+print(nfiles)
+print(args.number)
 if (args.number<= nfiles):
 	conf = Configuration(params,files[args.number])
 	hess = Hessian(conf,False)
@@ -53,7 +53,7 @@ if (args.number<= nfiles):
 	hess.getModes()
 	hess.plotModes(8.0,100)
 else:
-	print "Error: this configuration doesn't exist!"
+	print("Error: this configuration doesn't exist!")
 	
 plt.show()
 

@@ -6,7 +6,7 @@ def stripmain():
     area = 3.0
     bp = 0.5
     N = int(round((lx * ly)/area))
-    print 'number of cells in strip', N
+    print(('number of cells in strip', N))
     planea = Plane(lx,ly,N,0.0,bp)
     planeb = Plane(lx,ly,N,0.0,bp)
     planec = Plane(lx,ly,N,0.0,bp)

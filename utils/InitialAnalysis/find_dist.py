@@ -32,18 +32,18 @@ parser.add_argument("-i", "--input", type=str, help="input file in ACPS dat form
 parser.add_argument("-o", "--output", type=str, default='dist.dat', help="list of all distances")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tDistance to seed particle"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tDistance to seed particle")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print()
 
 start = datetime.now()
 
@@ -67,6 +67,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

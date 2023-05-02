@@ -58,23 +58,23 @@ parser.add_argument("-l", "--length", type=float, default=1.0, help="rod length"
 parser.add_argument("-b", "--bonds", type=str, default=None, help="bond file")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tConverts dat files to VTP files"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tConverts dat files to VTP files")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
 if args.contact != None:
-  print "\tContact network data file : ", args.contact
+  print("\tContact network data file : ", args.contact)
 if args.exclude != None:
-  print "\tExclude all contact lines that are longer than : ", args.exclude 
-print
+  print("\tExclude all contact lines that are longer than : ", args.exclude) 
+print()
 
 start = datetime.now()
 
@@ -90,7 +90,7 @@ else:
 if args.contact != None:
   cont_files = sorted(glob(args.contact+'*.con'))[args.skip:]  
   if len(files) != len(cont_files):
-    print "There has to be same number of data and contact files."
+    print("There has to be same number of data and contact files.")
     sys.exit(1)
 
 # read bonds
@@ -100,7 +100,7 @@ if args.bonds != None:
     lines = bond_file.readlines()
     #print lines
     #lines = lines.split('\n')
-    lines = map(lambda x: x.strip(), lines)
+    lines = [x.strip() for x in lines]
     for line in lines:
       b = line.split()
       bonds.append((int(b[2]),int(b[3])))
@@ -108,7 +108,7 @@ if args.bonds != None:
     
 u=0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
 
   Points = vtk.vtkPoints()
 
@@ -118,7 +118,7 @@ for f in files:
 
   data = ReadData(f)
 
-  if not (data.keys.has_key('x') and data.keys.has_key('y') and data.keys.has_key('z')):
+  if not ('x' in data.keys and 'y' in data.keys and 'z' in data.keys):
     raise "Particle coordinate not specified in the input data."
 
   x = np.array(data.data[data.keys['x']])
@@ -127,29 +127,29 @@ for f in files:
   
   Lx, Ly, Lz = np.max(x) - np.min(x), np.max(y) - np.min(y), np.max(z) - np.min(z)
 
-  if (data.keys.has_key('vx') or data.keys.has_key('vy') or data.keys.has_key('vz')):
+  if ('vx' in data.keys or 'vy' in data.keys or 'vz' in data.keys):
     vx = np.array(data.data[data.keys['vx']])
     vy = np.array(data.data[data.keys['vy']])
     vz = np.array(data.data[data.keys['vz']])
     has_v = True
 
-  if (data.keys.has_key('nx') or data.keys.has_key('ny') or data.keys.has_key('nz')):
+  if ('nx' in data.keys or 'ny' in data.keys or 'nz' in data.keys):
     nx = np.array(data.data[data.keys['nx']])
     ny = np.array(data.data[data.keys['ny']])
     nz = np.array(data.data[data.keys['nz']])
     has_n = True
 
-  if (data.keys.has_key('radius')):
+  if ('radius' in data.keys):
     r = np.array(data.data[data.keys['radius']])
   else:
     r = np.ones(len(x))  
   
-  if (data.keys.has_key('type')):
+  if ('type' in data.keys):
     tp = np.array(data.data[data.keys['type']])
   else:
     tp = np.ones(len(x))
     
-  if (data.keys.has_key('flag')):
+  if ('flag' in data.keys):
     flag = np.array(data.data[data.keys['flag']])
   else:
     flag = np.arange(len(x))
@@ -203,13 +203,13 @@ for f in files:
 
   if args.contact != None:
     if args.connected:
-      print "Error! You cannot use --connected flag with the contact network data"
+      print("Error! You cannot use --connected flag with the contact network data")
       sys.exit(1)
     Lines = vtk.vtkCellArray()
     Line = vtk.vtkLine()
     contact = open(cont_files[u],'r')
     con_lines = contact.readlines()
-    con_lines = map(lambda x: x.strip().split(),con_lines)
+    con_lines = [x.strip().split() for x in con_lines]
     edges = []
     for line in con_lines:
       if not line[0] == '#':
@@ -257,7 +257,7 @@ for f in files:
     points = np.column_stack((x,y,z)) 
     hull = ConvexHull(points)
     edges = []
-    nneighs = [0 for i in xrange(len(x))]
+    nneighs = [0 for i in range(len(x))]
     for h in hull.simplices:
       i, j, k = h
       if not sorted([i,j]) in edges: edges.append(sorted([i,j]))
@@ -329,7 +329,7 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
   

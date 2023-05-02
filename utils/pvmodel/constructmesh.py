@@ -36,13 +36,13 @@ def rwoperate(ifile):
     for ki, k in enumerate(keys):
         outd[k] = rdat.data[ki]
     if 'id' in outd:
-        outd['id'] = map(int, outd['id'])
+        outd['id'] = list(map(int, outd['id']))
     if 'type' in outd:
-        outd['type'] = map(int, outd['type'])
+        outd['type'] = list(map(int, outd['type']))
     if 'boundary' in outd:
-        outd['boundary']= map(int, outd['boundary'])
+        outd['boundary']= list(map(int, outd['boundary']))
     if 'in_tissue' in outd:
-        outd['in_tissue'] = map(int, outd['in_tissue'])
+        outd['in_tissue'] = list(map(int, outd['in_tissue']))
     
     # the rest are hopefully floats at the moment
     return outd
@@ -144,7 +144,7 @@ class Environ(object):
 
         # create a set of pairs
         hpairs = set()
-        for i, neigh in neighbours.items():
+        for i, neigh in list(neighbours.items()):
             for j in neigh:
                 hpairs.add(frozenset([i, j]))
 
@@ -166,8 +166,8 @@ class Environ(object):
                 tparr[i] = self.envbtype
                 boundaryn += 1
 
-        print 'no. boundary substrate:', boundaryn
-        print 'total number in substrate:', len(hx)
+        print(('no. boundary substrate:', boundaryn))
+        print(('total number in substrate:', len(hx)))
         self.tparr = tparr
         return hx, tparr, bonds
 
@@ -198,14 +198,14 @@ class Environ(object):
 
         right = right[::-1]; bottom = bottom[::-1] # orient the boundary clockwise
 
-        self.sides = OrderedDict(zip(['top', 'right', 'bottom', 'left'], [top, right, bottom, left]))
+        self.sides = OrderedDict(list(zip(['top', 'right', 'bottom', 'left'], [top, right, bottom, left])))
         self.bpos = np.concatenate([ top , right, bottom, left ] )
         self.bpos = np.column_stack([self.bpos[:,0], self.bpos[:,1], np.full(self.bpos.shape[0], 0.)])
 
     # delete 2n + 1 environment particle from the right edge of the box
     # run after generate_square_box()
     def breakbox(self, n=4):
-        top, right, bottom, left = self.sides.values()
+        top, right, bottom, left = list(self.sides.values())
         dex = len(right)/2
 
         tdel = np.arange(dex-n, dex+n+1, 1, dtype=int)
@@ -236,13 +236,13 @@ class CellInput(object):
         # The ReadData object is a bit clunky so convert to an ordered dictionary
         self.outd = rwoperate(ifile)
         # The number of particles
-        self.N = len(self.outd.values()[0])
+        self.N = len(list(self.outd.values())[0])
         # keep track of the tissue ids
         self.all = None
         if 'id' in self.outd:
             self.all = self.outd['id']
         else:
-            print 'Warning: This file has no ids, assume range starting form zero'
+            print('Warning: This file has no ids, assume range starting form zero')
             self.all = np.arange(len(self.outd['x']))
 
 
@@ -254,10 +254,10 @@ class CellInput(object):
     def prepend_env(self, env):
         outd = self.outd
         otherattrs = set(outd.keys()) - set(env.ekeys)
-        print 'attrs to set to zero', otherattrs
+        print(('attrs to set to zero', otherattrs))
         # create id array
         nbp = len(env.bpos)
-        startid = len( outd.values()[0] )
+        startid = len( list(outd.values())[0] )
         idx = np.arange(startid, startid + nbp, 1, dtype=int)
         x = env.bpos[:,0]
         y = env.bpos[:,1]
@@ -325,8 +325,8 @@ class CellInput(object):
             if tp == init:
                 targets.append(i)
         ntc = int(perc*len(targets))
-        print ntc
-        print 'changing the type of {} particles'.format(ntc)
+        print(ntc)
+        print(('changing the type of {} particles'.format(ntc)))
         return rn.sample(targets, ntc)
 
     def get_sides(self):
@@ -411,7 +411,7 @@ class CellInput(object):
         noutd['id'] = ids
         noutd['type'] = tp
         noutd['radius'] = radius
-        for k, v in self.outd.items():
+        for k, v in list(self.outd.items()):
             noutd[k] = v
         self.outd = noutd
 
@@ -434,10 +434,10 @@ class CellInput(object):
 
     def point_outwards(self):
         centre = [0., 0.]
-        cx, xy = centre
+        cx, cy = centre
         bd = self.outd['boundary']
         allbd = np.where(bd==1)[0]
-        xy = zip(np.array(self.outd['x'])[allbd], np.array(self.outd['y'])[allbd])
+        xy = list(zip(np.array(self.outd['x'])[allbd], np.array(self.outd['y'])[allbd]))
         for i, pt in zip(allbd, xy):
             x, y = pt[0] - cx, pt[1] - cy
             norm = np.sqrt(x**2 + y**2)
@@ -470,9 +470,9 @@ class CellInput(object):
         r, n, rot_angle = rotate_xyz(self, direction)
 
         # now pick an id which is on the x-y plane
-        print np.absolute(r[:,2])
+        print((np.absolute(r[:,2])))
         seedid = np.argmin(np.absolute(r[:,2]))
-        print 'using seed particle in the band', seedid, 'at position', self.rvals[seedid]
+        print(('using seed particle in the band', seedid, 'at position', self.rvals[seedid]))
         
         #hardcode constraint radius
         R = 28.2094791774 
@@ -503,8 +503,8 @@ class CellInput(object):
         for idx in ids:
             if isnear(idx):
                 obst.append(idx)
-        print 'obstacle particles'
-        print obst
+        print('obstacle particles')
+        print(obst)
 
         return obst 
  
@@ -525,21 +525,21 @@ class CellInput(object):
         # throw away the seed we have
         seed = np.array([R, 0, 0])
         rseed = rotate_vectorial(np.array([seed]), np.array([n[0]]), rot_angle)[0]
-        print rseed
+        print(rseed)
         obst = self.whatobstacle(rseed, obsr+0.5)
 
         # remove these particles
         mask = np.zeros(self.N, dtype='bool')
         mask[np.array(obst)] = 1
-        for k, v in self.outd.items():
+        for k, v in list(self.outd.items()):
             # so all the data is in numpy array form now
             # we should make it like this at the read-in step
             self.outd[k] = np.array(v)[~mask]
         
         # we didn't rotate the velocities and directors only the positions
         # Best to construct the obstacle and then rotate it 
-        ll = len(self.outd.values()[0])
-        print 'number of particles remaining', ll
+        ll = len(list(self.outd.values())[0])
+        print(('number of particles remaining', ll))
 
         # add obstacle particles
         # needed fields for adding a particle
@@ -555,7 +555,7 @@ class CellInput(object):
         # reset ids
         self.N = len(self.outd['id'])
         self.outd['id'] = np.arange(self.N, dtype='int32')
-        print self.outd['id']
+        print((self.outd['id']))
 
         
 
@@ -761,7 +761,7 @@ def makeout(rvals, parea):
 
 npnormal= np.array([0.,0.,1.])
 def fillout(outd, normal=npnormal):
-    ld= len(outd.values()[0])
+    ld= len(list(outd.values())[0])
     outd['nvz'] = np.full(ld, 1.)
     for hh in ['vx', 'vy', 'vz', 'nvx', 'nvy']:
         outd[hh] = np.full(ld, 0.)
@@ -788,7 +788,7 @@ def areahex(area=3.0):
     rads = np.linspace(0, 2*np.pi, 6, False)
     def hexes(rad):
         return [np.cos(rad), np.sin(rad), 0.]
-    hpts = lc*np.array(map(hexes, rads))
+    hpts = lc*np.array(list(map(hexes, rads)))
     pts = list(hpts)
 
     R = wr.rotation_2d(np.pi/4)
@@ -796,7 +796,7 @@ def areahex(area=3.0):
         pt[1] *= 2
         pt[:2] = np.einsum('mn,n->m', R, pt[:2])
 
-    crads = lc*np.array(map(hexes, rads+(np.pi/6)))
+    crads = lc*np.array(list(map(hexes, rads+(np.pi/6))))
     for hcenter in hpts:
         _extend_ptset(pts, [hcenter+hpt for hpt in hpts])
     outd = makeout(pts, [area]*len(pts))
@@ -857,13 +857,13 @@ def shift_area(ifile, shift):
 # of the particles of type x randomly choose a percentage of them to be of type y
 def addactive(ifile, init=2, perc=0.1, fin=3):
     outd = rwoperate(ifile, None)
-    types = map(int, outd['type'])
+    types = list(map(int, outd['type']))
     linit = [i for i, ty in enumerate(types) if ty==init]
     llinit = len(linit)
     tochange = int(perc * llinit)
-    print 'changing the type of {} particles'.format(tochange)
+    print(('changing the type of {} particles'.format(tochange)))
 
-    change = rn.sample(range(llinit), tochange)
+    change = rn.sample(list(range(llinit)), tochange)
     for i in change:
         types[i] = fin
     outd['type'] = types
@@ -873,7 +873,7 @@ def addactive(ifile, init=2, perc=0.1, fin=3):
         
 def addarea(ifile, area=3.0):
     outd = rwoperate(ifile)
-    k1 = outd.keys()[0]
+    k1 = list(outd.keys())[0]
     areas = np.zeros(len(outd[k1]))
     areas.fill(area)
     outd['area']  = areas
@@ -890,7 +890,7 @@ def circleslice(ifile, radius=5.15,  condition='square', boundary=True,  center=
     x = np.array(rdat.data[keys['x']])
     y = np.array(rdat.data[keys['y']])
     z = np.array(rdat.data[keys['z']])
-    rlists = [rdat.data[k] for k in keys.values()]
+    rlists = [rdat.data[k] for k in list(keys.values())]
     outd = OrderedDict()
     for k in keys:
         outd[k] = []
@@ -908,18 +908,18 @@ def circleslice(ifile, radius=5.15,  condition='square', boundary=True,  center=
                 continue
 
         # keep this line
-        for kn, kv in keys.items():
+        for kn, kv in list(keys.items()):
             outd[kn].append( rdat.data[kv][i] )
     # fix the ids
-    ids = range(len(outd.values()[0]))
+    ids = list(range(len(list(outd.values())[0])))
     lz = ids[-1] +1
     outd['id'] = ids
     # set all the velocities to zero
     for kn in ['vx', 'vy']:
         outd[kn] = list(np.zeros(lz))
     if 'type' in outd:
-        outd['type'] = map(int, outd['type'])
-    outd['boundary'] = map(int, outd['boundary'])
+        outd['type'] = list(map(int, outd['type']))
+    outd['boundary'] = list(map(int, outd['boundary']))
 
     # add circular boundary of cells
     if boundary:
@@ -927,7 +927,7 @@ def circleslice(ifile, radius=5.15,  condition='square', boundary=True,  center=
         bcelldensity = 0.9
         nbcells = round( (2* np.pi * rr) * bcelldensity)
         thetas = np.linspace(0, 2*np.pi, nbcells, False)
-        print 'number of boundary particles', len(thetas)
+        print(('number of boundary particles', len(thetas)))
 
         xb = rr *np.cos(thetas)
         yb = rr *np.sin(thetas)
@@ -957,8 +957,8 @@ if __name__=='__main__':
 
     args = sys.argv[1:]
     nargs = len(args)
-    if nargs is 0:
-        print 'python constructmesh <function> [*arguments]'
+    if nargs == 0:
+        print('python constructmesh <function> [*arguments]')
         sys.exit()
 
     fname = args[0]
@@ -966,15 +966,15 @@ if __name__=='__main__':
     try:
         f_using = locals()[fname]
     except KeyError:
-        print 'I don\'t have a function \'%s\'', fname
+        print(('I don\'t have a function \'%s\'', fname))
         raise
 
-    if len(fargs) is 0:
-        print 'No arguments given to constructmesh.%s' % fname
+    if len(fargs) == 0:
+        print(('No arguments given to constructmesh.%s' % fname))
 
         if hasattr(f_using, 'defaults'):
             fargs = f_using.defaults
-            print 'Using defaults ', f_using.defaults
+            print(('Using defaults ', f_using.defaults))
         else:
             fargs = []
 
@@ -986,7 +986,7 @@ if __name__=='__main__':
             # This string has a '.' and look like an object
             #ff[i] = f
             pass
-    print ff
+    print(ff)
 
     outd = f_using(*ff)
     if outd:

@@ -186,28 +186,28 @@ class Param:
 				#print self.filename
 				
 		self.filename=filename
-		print filename
+		print(filename)
 		conf = ReadConf(self.filename)
 		
 		# Message file
 		self.messagefile = conf.key_words['messages'][0].name
-		print "Message file: " + self.messagefile
+		print("Message file: " + self.messagefile)
 		# Boxes
 		self.boxtype = conf.key_words['box'][0].name 
-		print "Box type: " + self.boxtype
+		print("Box type: " + self.boxtype)
 		self.box=[]
 		self.box.append(float(conf.key_words['box'][0].attributes[0].val))
 		self.box.append(float(conf.key_words['box'][0].attributes[1].val))
 		self.box.append(float(conf.key_words['box'][0].attributes[2].val))
-		print "Box dimensions: " 
-		print self.box
+		print("Box dimensions: ") 
+		print(self.box)
 		# Neighbour list
 		self.nlist_rcut = float(conf.key_words['nlist'][0].attributes[0].val)
 		self.nlist_pad = float(conf.key_words['nlist'][0].attributes[1].val)
-		print "Neighbour list rcut " + str(self.nlist_rcut) + " and padding " + str(self.nlist_pad)
+		print("Neighbour list rcut " + str(self.nlist_rcut) + " and padding " + str(self.nlist_pad))
 		# Input file
 		self.inputfile = conf.key_words['input'][0].name
-		print "Input file: " + self.inputfile
+		print("Input file: " + self.inputfile)
 		# Dump parameters
 		self.dumpname=conf.key_words['dump'][0].name
 		self.dump={}
@@ -228,18 +228,18 @@ class Param:
 			for l in range(self.ngroups):
 				self.groupnames.append(conf.key_words['group'][l].name) 
 				self.grouptypes.append(int(conf.key_words['group'][l].attributes[0].val))
-			print "Group names: " 
-			print self.groupnames
-			print "Group types: " 
-			print self.grouptypes
+			print("Group names: ") 
+			print(self.groupnames)
+			print("Group types: ") 
+			print(self.grouptypes)
 		except KeyError: 
 			self.ngroups=1
-		print "Number of groups: " + str(self.ngroups)
+		print("Number of groups: " + str(self.ngroups))
 				
 		# Constraints
 		try:
 			self.constraint = conf.key_words['constraint'][0].name 
-			print "Constraint: " + self.constraint
+			print("Constraint: " + self.constraint)
 			self.const_params={}
 			try:
 				for l in range(len(conf.key_words['constraint'][0].attributes)):
@@ -250,15 +250,15 @@ class Param:
 							self.const_params[str.strip(conf.key_words['constraint'][0].attributes[l].name)]=str.strip(conf.key_words['constraint'][0].attributes[l].val)
 						except: # no constraints
 							pass
-				print "Constraint parameters " 
-				print self.const_params
+				print("Constraint parameters ") 
+				print(self.const_params)
 			except KeyError:
 				pass
 			# Legacy for the two most common constraints 
 			if self.constraint == 'sphere':
 				self.r=float(conf.key_words['constraint'][0].attributes[0].val)
-				print 'Radius'
-				print self.r
+				print('Radius')
+				print(self.r)
 			elif self.constraint == 'plane':
 				try: # try from the constraint
 					self.lx=float(conf.key_words['constraint'][0].attributes[0].val)
@@ -266,9 +266,9 @@ class Param:
 				except:# else use the box
 					self.lx=self.box[0]
 					self.ly=self.box[1]
-				print 'Lx and Ly'
-				print self.lx
-				print self.ly  
+				print('Lx and Ly')
+				print(self.lx)
+				print(self.ly)  
 				if self.boxtype=='periodic':
 					self.constraint='plane_periodic'
 		except KeyError:
@@ -300,11 +300,11 @@ class Param:
 			except KeyError: 
 				self.aligner='none'
 				self.J=0.0
-		print "Potential: " + self.potential
-		print "Parameters: " 
-		print self.pot_params
-		print "Aligner: " +self.aligner
-		print "J: " + str(self.J)
+		print("Potential: " + self.potential)
+		print("Parameters: ") 
+		print(self.pot_params)
+		print("Aligner: " +self.aligner)
+		print("J: " + str(self.J))
 		
 		# Something for our friends the cells
 		# As written, we only ever read the first potential ... generalise
@@ -320,13 +320,13 @@ class Param:
 		# Everything is based on the assumption that there is only one of these, currently ...
 		nNVE=0
 		if conf.key_words['integrator'][0].name=='nve':
-			print "NVE integrator " 
+			print("NVE integrator ") 
 			self.nstepsNVE= int(conf.key_words['run'][0].name)
 			nNVE+=1
 		else:
 			self.nstepsNVE=0
-		print "NVE steps: " + str(self.nstepsNVE)
-		print "NVE integrators: " + str(nNVE)
+		print("NVE steps: " + str(self.nstepsNVE))
+		print("NVE integrators: " + str(nNVE))
 				
 		# Type-wise pair potentials and aligners (careful: types and groups don't have to match!)
 		# square lists of lists of dictionaries or names
@@ -334,7 +334,7 @@ class Param:
 		# Minor leap of faith: types are numbered 0 1 2 etc., and all of them are part of *some* group
 		if self.ngroups>1:
 			self.ntypes=max(self.grouptypes)
-			print "Number of types: " + str(self.ntypes)
+			print("Number of types: " + str(self.ntypes))
 			if self.ntypes>1:
 				# Potentials
 				self.type_potential=[[self.potential for u in range(self.ntypes)] for u in range(self.ntypes)]
@@ -368,14 +368,14 @@ class Param:
 						self.type_J[type1][type2]=float(conf.key_words['align_param'][l].attributes[2].val)
 				except:
 					pass
-				print "Type potentials: " 
-				print self.type_potential
-				print "Type potential parameters" 
-				print self.type_pot_params
-				print "Type aligners: " 
-				print self.type_aligner
-				print "Type J" 
-				print self.type_J
+				print("Type potentials: ") 
+				print(self.type_potential)
+				print("Type potential parameters") 
+				print(self.type_pot_params)
+				print("Type aligners: ") 
+				print(self.type_aligner)
+				print("Type J") 
+				print(self.type_J)
 		else:
 			self.ntypes=1
 				
@@ -385,7 +385,7 @@ class Param:
 		self.one_integrator=False
 		if self.ngroups==1:
 			self.integrator=conf.key_words['integrator'][nNVE].name
-			print "Main integrator: " + self.integrator
+			print("Main integrator: " + self.integrator)
 			self.int_params={}
 			for l in range(len(conf.key_words['integrator'][nNVE].attributes)):
 				try:
@@ -397,7 +397,7 @@ class Param:
 			self.group_integrator=['none' for u in range(self.ngroups)] 
 			self.group_int_params=[{} for u in range(self.ngroups)]
 			nintegrator=len(conf.key_words['integrator'])
-			print "Found " + str(nintegrator) + " intergrators!"
+			print("Found " + str(nintegrator) + " intergrators!")
 			for k in range(nNVE,nintegrator): # Excluding the NVE here
 				int_params={}
 				for l in range(len(conf.key_words['integrator'][k].attributes)):
@@ -414,7 +414,7 @@ class Param:
 					mygroup='all'
 				if mygroup =='all':
 					self.integrator=conf.key_words['integrator'][k].name
-					print "Main integrator: " + self.integrator
+					print("Main integrator: " + self.integrator)
 					self.int_params=int_params
 					done = self.oneInt(conf)
 				else:
@@ -423,17 +423,17 @@ class Param:
 					self.group_int_params[groupidx]=int_params
 					if (nintegrator-nNVE)==1: #only one moving group, for example
 						self.integrator=conf.key_words['integrator'][k].name
-						print "Main integrator: " + self.integrator
+						print("Main integrator: " + self.integrator)
 						self.int_params=int_params
 						done = self.oneInt(conf)
 					else:
 						if k==(nintegrator-1):
-							print "Warning: multiple complex integrators "
-							print self.group_integrator 
-							print " for groups " 
-							print self.groupnames
-							print "Parameters are stored in the dictionary self.group_int_params:"
-							print self.group_int_params
+							print("Warning: multiple complex integrators ")
+							print(self.group_integrator) 
+							print(" for groups ") 
+							print(self.groupnames)
+							print("Parameters are stored in the dictionary self.group_int_params:")
+							print(self.group_int_params)
 		
 		# Population control
 		# MISSING: The fade-in options 
@@ -442,7 +442,7 @@ class Param:
 		try:
 			self.npopulation = len(conf.key_words['population'])
 			if self.npopulation>0:
-				print "Number of populations: " + str(self.npopulation)
+				print("Number of populations: " + str(self.npopulation))
 				self.population=[]
 				self.pop_params=[{} for k in range(self.npopulation)]
 				for k in range(self.npopulation):
@@ -452,17 +452,17 @@ class Param:
 							self.pop_params[k][str.strip(conf.key_words['population'][k].attributes[l].name)]=float(conf.key_words['population'][k].attributes[l].val)
 						except:
 							self.pop_params[k][str.strip(conf.key_words['population'][k].attributes[l].name)]=str.strip(conf.key_words['population'][k].attributes[l].val)
-				print "Populations: "
-				print self.population
-				print "Population parameters: "
-				print self.pop_params
+				print("Populations: ")
+				print(self.population)
+				print("Population parameters: ")
+				print(self.pop_params)
 		except KeyError:
 			self.npopulation=0
 			pass
 		
 		self.nsteps = int(conf.key_words['run'][nNVE].name)
-		print 'Simulation time steps'
-		print self.nsteps
+		print('Simulation time steps')
+		print(self.nsteps)
 	
 	
 	def oneInt(self,conf):
@@ -478,34 +478,34 @@ class Param:
                             # Oh yes, that syntax is incompatible with the parser
                             # And leads to all kind of BS if I don't stay on top of it
                             self.dt=0.01
-                        print "Time step: " + str(self.dt)
+                        print("Time step: " + str(self.dt))
 			self.seed = self.int_params['seed']
-			print "Dynamics seed: " + self.seed
+			print("Dynamics seed: " + self.seed)
 			self.mu = self.int_params['mu']
-			print "Mobility: " + str(self.mu)
+			print("Mobility: " + str(self.mu))
 			# Again, the stupid v0 as external aligner type
 			try:
                             self.v0 = float(conf.key_words['external'][0].attributes[0].val)
                         except:
                             self.v0 = self.int_params['v0']
-			print "v0: " + str(self.v0)
+			print("v0: " + str(self.v0))
 			self.nu = self.int_params['nu']
-			print "Noise strength: " + str(self.nu)
+			print("Noise strength: " + str(self.nu))
 			self.nematic=False
 			try:
 				dmp=self.int_params['nematic']
 				self.nematic=True
 				self.tau_flip=self.int_params['tau']
-				print "Nematic system with flip time " + str(self.tau_flip)
+				print("Nematic system with flip time " + str(self.tau_flip))
 			except:
 				pass
 			if self.potential=='rod':
                                 try:
                                     self.mur = self.int_params['mur']
-                                    print "Rod rotational mobility " + str(self.mur)
+                                    print("Rod rotational mobility " + str(self.mur))
                                 except:
                                     self.mu = self.int_params['mu']
-                                    print "Rod rotational mobility " + str(self.mu)
+                                    print("Rod rotational mobility " + str(self.mu))
 				
 			self.thermal=False
 			try:
@@ -513,7 +513,7 @@ class Param:
 				self.thermal=True
 				self.kT=self.int_params['min_val'] # screw this, put in ramps only once we need them
 				self.kT_steps=self.int_params['steps']
-				print "Thermal brownian with " + self.thermal + " temperature " + self(kT) + " and steps " + str(self.kT_steps)
+				print("Thermal brownian with " + self.thermal + " temperature " + self(kT) + " and steps " + str(self.kT_steps))
 			except:
 				pass
 			self.movegroup='all'
@@ -521,7 +521,7 @@ class Param:
 				self.movegroup = self.int_params['group']
 			except:
 				pass
-			print "Moving group: " + self.movegroup
+			print("Moving group: " + self.movegroup)
 		elif self.integrator=='vicsek':
 			self.dt =float(self.int_params['dt']) 
 			self.seed = self.int_params['seed']
@@ -530,7 +530,7 @@ class Param:
 			self.nu = self.int_params['eta']
 		else:
 			self.dt =float(self.int_params['dt']) 
-			print "Warning: unknown integrator type " + self.integrator + ". Parameters are stored in the dictionary self.int_params."
+			print("Warning: unknown integrator type " + self.integrator + ". Parameters are stored in the dictionary self.int_params.")
 			return 1
 		return 0
 	

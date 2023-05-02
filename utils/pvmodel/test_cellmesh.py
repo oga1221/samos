@@ -14,9 +14,9 @@ def test_bond_intersection():
     case['inner'] = np.array([[0.,0.], [-1.,-1.], [1.,1.]])
     case['half'] = np.array([[0.,0.], [-1/2., 0.], [5.,1.]])
     wl = 2.
-    for ck, cv in case.items():
-        print 
-        print 'case ', ck
+    for ck, cv in list(case.items()):
+        print() 
+        print(('case ', ck))
         x_c, a, b = cv
 
         inter = bond_intersection(x_c, wl, a, b)
@@ -24,8 +24,8 @@ def test_bond_intersection():
             return None
         else:
             ma, mb, line = inter
-            print ma, mb
-            print line(ma), line(mb)
+            print((ma, mb))
+            print((line(ma), line(mb)))
 
 
 import time
@@ -37,8 +37,8 @@ def timeit(f):
         result = f(*args, **kw)
         te = time.time()
 
-        print 'func:%r args:[%r, %r] took: %2.4f sec' % \
-          (f.__name__, args, kw, te-ts)
+        print(('func:%r args:[%r, %r] took: %2.4f sec' % \
+          (f.__name__, args, kw, te-ts)))
         return result
     return timed
 
@@ -48,9 +48,9 @@ boundary_test_dataf = '/home/dan/cells/run/rprefA/rA_3.5/cell_0000004500.dat'
 # simple object represents the args object I use to configure Senarios
 class Block(object):
     def __init__(self, dd={}, **kwargs):
-        for k, v in dd.items():
+        for k, v in list(dd.items()):
             setattr(self, k, v)
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
 wld = 3.0
@@ -64,7 +64,7 @@ def time_stress():
     args = Block(defaults)
     stressrun = Stress_Senario(args)
     stressrun.save_parameters()
-    nxt= timeit(stressrun.next)
+    nxt= timeit(stressrun.__next__)
     nxt()
 
 def test_dual():

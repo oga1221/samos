@@ -109,25 +109,25 @@ p = (args.length+sigma)/sigma
 lx = sqrt(Arod*p/args.phi)
 ly = sqrt(Arod/(p*args.phi))
 
-print p, lx, ly
+print(p, lx, ly)
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014, 2015"
-print "\t----------------------------------------------"
-print 
-print "\tLx : ", args.lx
-print "\tLy : ", args.ly
-print "\tPacking fraction : ", args.phi
-print "\tNumber of particles : ", N
-print "\tOutput file : ", args.output
-print "\tRod radius : ", args.radius
-print "\tRod length : ", args.length
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014, 2015")
+print("\t----------------------------------------------")
+print() 
+print("\tLx : ", args.lx)
+print("\tLy : ", args.ly)
+print("\tPacking fraction : ", args.phi)
+print("\tNumber of particles : ", N)
+print("\tOutput file : ", args.output)
+print("\tRod radius : ", args.radius)
+print("\tRod length : ", args.length)
+print() 
 
 start = datetime.now()
 
@@ -138,12 +138,12 @@ random_orinet = True
 p = Plane(args.lx, args.ly, N, lx, ly, sigma, args.length)
 p.write(args.output)
 
-print "Actual packing fraction for this box : ", len(p.particles)*Arod/area
+print("Actual packing fraction for this box : ", len(p.particles)*Arod/area)
 
 end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

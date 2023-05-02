@@ -142,25 +142,25 @@ parser.add_argument("-v", "--vavr", type=float, default=1.0, help="average veloc
 parser.add_argument("-x", "--xyz", type=str, default=None, help="name of the XYZ file for surface reconstruction")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random configuration on a peanut"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014"
-print "\t----------------------------------------------"
-print 
-print "\ta : ", args.a
-print "\tb : ", args.b
-print "\tPacking fraction : ", args.phi
-print "\tAverage velocity : ", args.vavr
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random configuration on a peanut")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014")
+print("\t----------------------------------------------")
+print() 
+print("\ta : ", args.a)
+print("\tb : ", args.b)
+print("\tPacking fraction : ", args.phi)
+print("\tAverage velocity : ", args.vavr)
 ###### WRONG !!!!#########
 N=int(round(4.0*args.a**2*args.phi))   
 ##########################
-print "\tTotal number of particles : ", N
-print "\tOutput file : ", args.output
-print 
+print("\tTotal number of particles : ", N)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 
@@ -175,6 +175,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

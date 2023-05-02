@@ -97,23 +97,23 @@ class Plane:
       p.n = [cos(phi),sin(phi),0.0]
   
   def set_radius(self,radii):
-    for i in xrange(len(radii)):
+    for i in range(len(radii)):
       self.particles[i].R = radii[i]
   
   def set_type(self,types):
-    for i in xrange(len(types)):
+    for i in range(len(types)):
       self.particles[i].tp = types[i]
   
   def set_lens(self,lens):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].l = lens[i]
       
   def set_mass(self,masses):
-    for i in xrange(len(masses)):
+    for i in range(len(masses)):
       self.particles[i].mass = masses[i]
   
   def gaussian_bump(self,A=1.0,a=1.0,b=1.0):
-    for i in xrange(len(self.particles)):
+    for i in range(len(self.particles)):
       x, y, z = self.particles[i].r
       z = A*exp(-x*x/(a*a) - y*y/(b*b))
       self.particles[i].r = [x,y,z]
@@ -154,7 +154,7 @@ args = parser.parse_args()
 
 if args.gaussian:
     V = dblquad(bump,-0.5*args.lx,0.5*args.lx,lambda x: -0.5*args.ly, lambda x: 0.5*args.ly,args=(args.amplitude,args.ga,args.gb))[0]
-    print 'Area : ', V
+    print('Area : ', V)
 else:
     V = args.lx*args.ly
 
@@ -163,27 +163,27 @@ if args.rods:
 else:
     N = int(round(1.0/pi*V*args.phi/(args.eta*args.a1**2+(1-args.eta)*args.a2**2)))
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014, 2015"
-print "\t----------------------------------------------"
-print 
-print "\tLx : ", args.lx
-print "\tLy : ", args.ly
-print "\tPacking fraction : ", args.phi
-print "\tNumber of particles : ", N
-print "\tAverage velocity : ", args.vavr
-print "\tOutput file : ", args.output
-print "\tFraction of particles of type 1 : ", args.eta
-print "\tRadius of particles of type 1 : ", args.a1
-print "\tRadius of particles of type 2 : ", args.a2
-print "\tLength of particles of type 1 (in units of radius) : ", args.l1
-print "\tLength of particles of type 2 (in units of radius) : ", args.l2
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014, 2015")
+print("\t----------------------------------------------")
+print() 
+print("\tLx : ", args.lx)
+print("\tLy : ", args.ly)
+print("\tPacking fraction : ", args.phi)
+print("\tNumber of particles : ", N)
+print("\tAverage velocity : ", args.vavr)
+print("\tOutput file : ", args.output)
+print("\tFraction of particles of type 1 : ", args.eta)
+print("\tRadius of particles of type 1 : ", args.a1)
+print("\tRadius of particles of type 2 : ", args.a2)
+print("\tLength of particles of type 1 (in units of radius) : ", args.l1)
+print("\tLength of particles of type 2 (in units of radius) : ", args.l2)
+print() 
 
 start = datetime.now()
 
@@ -199,7 +199,7 @@ radii = []
 types = []
 lens = []
 masses = []
-for i in xrange(len(p.particles)):
+for i in range(len(p.particles)):
   if i < args.eta*N: 
     radii.append(args.a1)
     types.append(1)
@@ -222,6 +222,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

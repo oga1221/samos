@@ -26,7 +26,7 @@ def vtk_write(polydata, outfile):
     else:
         writer.SetInputData(polydata)
 
-    if verb: print 'saving ', outfile 
+    if verb: print(('saving ', outfile)) 
 
     writer.SetFileName(outfile)
     writer.SetDataModeToAscii()
@@ -117,7 +117,7 @@ def writemeshenergy(pv, outfile):
     shear_arrs = [] # for deviatoric part
     is_xx_trace = True if hasattr(pv, 'xx_trace') else False
     if is_xx_trace:
-        for adjn, trace in pv.xx_trace.items():
+        for adjn, trace in list(pv.xx_trace.items()):
             t_name = 't_trace_{}'.format(adjn)
             texs.append(t_name)
             tmarr = vtk.vtkDoubleArray()
@@ -125,7 +125,7 @@ def writemeshenergy(pv, outfile):
             tmarr.SetName(t_name)
             trace_arrs.append(tmarr)
 
-        for adjn, trace in pv.xx_shear.items():
+        for adjn, trace in list(pv.xx_shear.items()):
             t_name = 't_shear_{}'.format(adjn)
             stexs.append(t_name)
             tsarr = vtk.vtkDoubleArray()
@@ -164,12 +164,12 @@ def writemeshenergy(pv, outfile):
 
     if is_xx_trace:
         for i, tarr in enumerate(trace_arrs):
-            adjn = pv.xx_trace.keys()[i]
+            adjn = list(pv.xx_trace.keys())[i]
             for traceval in pv.xx_trace[adjn]:
                 tarr.InsertNextValue(traceval)
 
         for i, tarr in enumerate(shear_arrs):
-            adjn = pv.xx_shear.keys()[i]
+            adjn = list(pv.xx_shear.keys())[i]
             for shearval in pv.xx_shear[adjn]:
                 tarr.InsertNextValue(shearval)
         
@@ -212,7 +212,7 @@ def writemeshenergy(pv, outfile):
 
 def get_stress(pv, pvstress):
     stress = OrderedDict()
-    for i, pvs in pvstress.items():
+    for i, pvs in list(pvstress.items()):
         if pvs is not None:
             stress[i]= pvs
     return stress
@@ -337,7 +337,7 @@ def write_stress_ellipses(pv, outfile, pvstress, res=20, usecentres=True, scale=
     # calculate principle stresses
     stress = pvstress
     evalues, evectors = {}, {}
-    for i in stress.keys():
+    for i in list(stress.keys()):
         ss = stress[i]
         evalues[i], evectors[i] = eig(ss)
 
@@ -347,18 +347,18 @@ def write_stress_ellipses(pv, outfile, pvstress, res=20, usecentres=True, scale=
 
     if normalise:
         evs = [v for row in list(evalues.values()) for v in row]
-        maxe1 =max(map(abs, evs))
+        maxe1 =max(list(map(abs, evs)))
         scale = maxe1
 
-    maxe = np.max(np.absolute(np.array(evalues.values())))
+    maxe = np.max(np.absolute(np.array(list(evalues.values()))))
     if maxe == 0.:
-        print evalues
+        print(evalues)
     normf = pv.tri.kproperty[0]
     if normf == 0.:
         normf = 1.
     normf *= scale
 
-    print 'adjusting stress ellipses by a factor of ', normf
+    print(('adjusting stress ellipses by a factor of ', normf))
     
     ells = vtk.vtkCellArray()
     for ellid, vhid in enumerate(stress.keys()):

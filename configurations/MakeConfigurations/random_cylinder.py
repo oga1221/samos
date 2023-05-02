@@ -123,25 +123,25 @@ parser.add_argument("-o", "--output", type=str, default='out.dat', help="output 
 parser.add_argument("-v", "--vavr", type=float, default=1.0, help="average velocity")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random spherical configuration"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
-print "\tRadius : ", args.radius
-print "\tHeight : ", args.height
-print "\tPacking fraction : ", args.phi
-print "\tAverage velocity : ", args.vavr
-print "\tAmplitude (wavy cylinder) : ", args.amplitude
-print "\tNumber of nodes (wavy cylinder) : ", args.n
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random spherical configuration")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
+print("\tRadius : ", args.radius)
+print("\tHeight : ", args.height)
+print("\tPacking fraction : ", args.phi)
+print("\tAverage velocity : ", args.vavr)
+print("\tAmplitude (wavy cylinder) : ", args.amplitude)
+print("\tNumber of nodes (wavy cylinder) : ", args.n)
 N=int(round(2.0*args.radius*args.height*args.phi))
-print "\tTotal number of particles : ", N
-print "\tOutput file : ", args.output
-print 
+print("\tTotal number of particles : ", N)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 
@@ -153,8 +153,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

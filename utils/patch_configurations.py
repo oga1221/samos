@@ -52,36 +52,36 @@ data_input = ReadData(fileinput)
 data_radius = ReadData(fileradius)
 
 # get the radius out of the second, and update the first with the correct keyword
-print data_radius.keys
+print(data_radius.keys)
 radpos = data_radius.keys['radius']
-print radpos
+print(radpos)
 		  
-if not data_input.keys.has_key('radius'): 
-  print "will do the merger surgery now"
-  print data_input.keys
+if 'radius' not in data_input.keys: 
+  print("will do the merger surgery now")
+  print(data_input.keys)
   nkeys=len(data_input.data)
-  print nkeys
+  print(nkeys)
   drad = {'radius':nkeys}
-  print drad
+  print(drad)
   # I suppose it's easiest to just glue it to the end?
   data_input.keys.update(drad)
-  print data_input.keys
+  print(data_input.keys)
   data_input.data.append(data_radius.data[radpos])
   #print data_input.data[nkeys]
-  print data_input.keys.keys()
+  print(list(data_input.keys.keys()))
   nkeys+=1
 else:
-  print "Error: This file actually already has radii! Nothing to be done!"
+  print("Error: This file actually already has radii! Nothing to be done!")
   
 
 keyval=[]
 keylabel=[]
 for u in range(nkeys):
 	# this is admittedly backwards, but it has to be done: find the position of the key of that particular line number
-	keyval.append(data_input.keys.values().index(u))
-	keylabel.append(data_input.keys.keys()[keyval[u]])
-print keyval
-print keylabel
+	keyval.append(list(data_input.keys.values()).index(u))
+	keylabel.append(list(data_input.keys.keys())[keyval[u]])
+print(keyval)
+print(keylabel)
 
 # First write the header labels
 # Now we just need to write it to file again
@@ -93,7 +93,7 @@ for u in range(nkeys):
 f.write('\n')
 # and then the rest of the data ...
 N=len(data_input.data[0])
-print N
+print(N)
 for i in range(N):
 	for u in range(nkeys):
 		f.write(str(data_input.data[u][i]) + '  ')

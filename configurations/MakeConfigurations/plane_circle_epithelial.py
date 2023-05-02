@@ -159,30 +159,30 @@ parser.add_argument("-v", "--vavr", type=float, default=0.1, help="average veloc
 parser.add_argument("-b", "--boundary", type=int, default=0, help="boundary n: 0 random 1 outward 2 inward")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding a glued circle random configuration on the plane"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print 
-print "\tSilke Henkes"
-print "\tUniversity of Aberdeen"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding a glued circle random configuration on the plane")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print() 
+print("\tSilke Henkes")
+print("\tUniversity of Aberdeen")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print() 
 #print "\tRadius : ", args.R
-print "\tpolydispersity: ", args.poly
+print("\tpolydispersity: ", args.poly)
 #N = int(round(args.R**2*args.phi/4.0)) # An individual particle has area pi R^2 = 4 pi
-print "\tPacking fraction : ", args.phi
-print "\tNumber of particles : ", args.N
+print("\tPacking fraction : ", args.phi)
+print("\tNumber of particles : ", args.N)
 R = sqrt(args.N/args.phi)
-print "\tRadius : ", R
-print "\tAverage velocity : ", args.vavr
-print "\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary
-print "\tOutput file : ", args.output
-print 
+print("\tRadius : ", R)
+print("\tAverage velocity : ", args.vavr)
+print("\tBoundary type (0 random 1 outward 2 inward) : ", args.boundary)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 #def __init__(self, R, N, v, poly):
@@ -193,6 +193,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

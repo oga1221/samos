@@ -25,7 +25,7 @@ def plot_avg_pressures(fglob='stress_st*.npz'):
     plt.xlabel('step')
     plt.ylabel('average_pressure')
     stdatas = [np.load(st) for st in stfiles]
-    xsteps = map(_outnum, stfiles)
+    xsteps = list(map(_outnum, stfiles))
     spressure = [np.mean(data['simple_radial_pressure']) for data in stdatas]
     plt.plot(xsteps, spressure, label='simple pressure', marker='o')
     vpressure = [np.mean(data['virial_radial_pressure']) for data in stdatas]
@@ -41,10 +41,10 @@ from ioutils import _nanmean
 @defaultsave
 def avg_pressures(fglob='stresses*.pkl'):
     sfiles = sorted(glob(fglob))
-    datas = map(_loadpkl, sfiles)
+    datas = list(map(_loadpkl, sfiles))
     plt.xlabel('step')
     plt.ylabel('average_pressure')
-    xsteps = map(_outnum, sfiles)
+    xsteps = list(map(_outnum, sfiles))
     stn = datas[0]
     if 'simple' in stn:
         spressure= [_nanmean(stress['simple'].pressure) for stress in datas]
@@ -73,14 +73,14 @@ def avg_pressures(fglob='stresses*.pkl'):
 @defaultsave
 def avg_stresses(stname='virial', fglob='stresses*.pkl'):
     sfiles = sorted(glob(fglob))
-    datas = map(_loadpkl, sfiles)
+    datas = list(map(_loadpkl, sfiles))
     plt.xlabel('step')
-    xsteps = map(_outnum, sfiles)
+    xsteps = list(map(_outnum, sfiles))
     if not stname in datas[0] and stname != 'all':
-        print 'didn\'t find that stress name'
+        print('didn\'t find that stress name')
         return 
     if stname == 'all':
-        names = datas[0].keys()
+        names = list(datas[0].keys())
     else:
         plt.title(stname)
         names= [stname]
@@ -135,7 +135,7 @@ def plot_wls(yname='radial_pressure', fglob='stress_wl*.npz'):
     npzl = sorted(glob(fglob))
     plt.xlabel('radial distance')
     plt.ylabel('radial pressure')
-    print npzl
+    print(npzl)
     for npz in npzl:
         data = np.load(npz)
         xs = data['rspace']

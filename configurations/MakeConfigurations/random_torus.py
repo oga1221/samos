@@ -123,24 +123,24 @@ parser.add_argument("-o", "--output", type=str, default='out.dat', help="output 
 parser.add_argument("-v", "--vavr", type=float, default=1.0, help="average velocity")
 args = parser.parse_args()
 
-print
-print "\tSoft Active Matter on Surfaces (SAMoS)"
-print "\tBuilding of a random configuration on torus"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2016"
-print "\t----------------------------------------------"
-print 
-print "\tLarge radius : ", args.Radius
-print "\tSmall radius : ", args.radius
-print "\tNumber density : ", args.density
-print "\tAverage velocity : ", args.vavr
+print()
+print("\tSoft Active Matter on Surfaces (SAMoS)")
+print("\tBuilding of a random configuration on torus")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2016")
+print("\t----------------------------------------------")
+print() 
+print("\tLarge radius : ", args.Radius)
+print("\tSmall radius : ", args.radius)
+print("\tNumber density : ", args.density)
+print("\tAverage velocity : ", args.vavr)
 A = 4*pi**2*args.Radius*args.radius
 N=int(round(A*args.density))
-print "\tTotal number of particles : ", N
-print "\tOutput file : ", args.output
-print 
+print("\tTotal number of particles : ", N)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 
@@ -152,8 +152,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

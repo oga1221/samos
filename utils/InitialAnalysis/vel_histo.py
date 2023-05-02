@@ -35,19 +35,19 @@ parser.add_argument("-i", "--input", type=str, help="base name of the input file
 parser.add_argument("-s", "--skip", type=int, default=0, help="skip this many samples")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tAverage velocity distribution"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tMinmum velocity : ", args.min
-print "\tMaximum velocity : ", args.max
-print "\tNumber of bins : ", args.bin
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tAverage velocity distribution")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tMinmum velocity : ", args.min)
+print("\tMaximum velocity : ", args.max)
+print("\tNumber of bins : ", args.bin)
+print()
 
 start = datetime.now()
 
@@ -73,7 +73,7 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
  

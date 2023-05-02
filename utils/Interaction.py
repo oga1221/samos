@@ -54,12 +54,12 @@ class Interaction:
 			elif self.param.potential=='gaussian':
 				# give it at least a default neighbour radius ...
 				self.dmax=2*self.sigma
-				print "Warning! Gaussian interaction has not yet been implemented!" 
+				print("Warning! Gaussian interaction has not yet been implemented!") 
 			elif self.param.potential=='rod':
 				# CHANGE: Assuming here rods are at default aspect ratio 5
 				self.dmax=10*self.sigma
 				self.mult=1.0
-				print "Warning! Rod interaction has not yet been implemented!"
+				print("Warning! Rod interaction has not yet been implemented!")
 			else:
 				# give it at least a default neighbour radius ...
 				self.dmax=2*self.sigma
@@ -69,7 +69,7 @@ class Interaction:
 			# give it at least a default neighbour radius ...
 			self.dmax=2*self.sigma
 			self.mult=1.0
-			print "Warning! Multiple types of particles interacting have not yet been implemented!"
+			print("Warning! Multiple types of particles interacting have not yet been implemented!")
 		
 	def getDmax(self):
 		return self.dmax
@@ -106,17 +106,17 @@ class Interaction:
 				Fvec=((fnorm/dr).transpose()*(drvec).transpose()).transpose()
 				return Fvec
 			elif self.param.potential=='gaussian':
-				print "Warning! Gaussian interaction has not yet been implemented! Returning zero force"
+				print("Warning! Gaussian interaction has not yet been implemented! Returning zero force")
 				return Fvec
 			elif self.param.potential=='rod':
-				print "Warning! Rod interaction has not yet been implemented! Returning zero force"
+				print("Warning! Rod interaction has not yet been implemented! Returning zero force")
 				return Fvec
 			else:
 				#print "Warning! Unknown interaction type! Returning zero force"
 				return Fvec
 		else:
 			# Do the Morse right now only ... will serve as a template
-			print "Warning! Multiple types of particles interacting have not yet been implemented! Returning zero force"
+			print("Warning! Multiple types of particles interacting have not yet been implemented! Returning zero force")
 			return Fvec
 				
 	def getStresses(self,i,neighbours,drvec,dr):
@@ -161,17 +161,17 @@ class Interaction:
 				eng_val=self.D*(1-np.exp(-self.a*(dr-self.re)))**2
 				return 0.5*eng_val
 			elif self.param.potential=='gaussian':
-				print "Warning! Gaussian interaction has not yet been implemented! Returning zero energy"
+				print("Warning! Gaussian interaction has not yet been implemented! Returning zero energy")
 				return 0
 			elif self.param.potential=='rod':
-				print "Warning! Rod interaction has not yet been implemented! Returning zero energy"
+				print("Warning! Rod interaction has not yet been implemented! Returning zero energy")
 				return 0
 			else:
 				#print "Warning! Unknown interaction type! Returning zero energy"
 				return 0
 		else:
 			# Do the Morse right now only ... will serve as a template
-			print "Warning! Multiple types of particles interacting have not yet been implemented! Returning zero energy"
+			print("Warning! Multiple types of particles interacting have not yet been implemented! Returning zero energy")
 			return 0
 	  
 	def getStiffness(self,i,neighbours,drvec,dr):
@@ -192,14 +192,14 @@ class Interaction:
 				stiff=2.0*self.a**2*self.D*np.exp(-self.a*(dr-self.re))*(2.0*np.exp(-self.a*(dr-self.re))-1)
 				return stiff
 			elif self.param.potential=='gaussian':
-				print "Warning! Gaussian interaction has not yet been implemented! Returning zero stiffness"
+				print("Warning! Gaussian interaction has not yet been implemented! Returning zero stiffness")
 				return np.zeros((len(neighbours),))
 			elif self.param.potential=='rod':
-				print "Warning! Rod interaction has not yet been implemented! Returning zero stiffness"
+				print("Warning! Rod interaction has not yet been implemented! Returning zero stiffness")
 				return np.zeros((len(neighbours),))
 			else:
 				#print "Warning! Unknown interaction type! Returning zero stiffness"
 				return np.zeros((len(neighbours),))
 		else:
 			# Do the Morse right now only ... will serve as a template
-			print "Warning! Multiple types of particles interacting have not yet been implemented! Returning zero stiffness"
+			print("Warning! Multiple types of particles interacting have not yet been implemented! Returning zero stiffness")

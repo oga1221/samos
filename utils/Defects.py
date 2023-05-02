@@ -45,7 +45,7 @@ class Defects:
 		if self.conf.geom.manifold == 'sphere':
                         self.THETAMIN=2*self.conf.inter.sigma/self.conf.geom.R
                         if verbose:
-                            print "Angle cutoff for polar defects: " + str(self.THETAMIN)
+                            print("Angle cutoff for polar defects: " + str(self.THETAMIN))
                         #fig = plt.figure()
                         #self.ax = fig.gca(projection='3d')
                         #self.ax.quiver(self.conf.rval[:,0], self.conf.rval[:,1], self.conf.rval[:,2], self.etheta[:,0], self.etheta[:,1], self.etheta[:,2])
@@ -62,26 +62,26 @@ class Defects:
 		# Count the defect charge. Times two, to use integers and easier if statements
 		# Need to reinitialize defects in case multiple trackings are done on the same system
 		if field == 'orientation':
-                        print "Looking for orientation field defects!"
+                        print("Looking for orientation field defects!")
                         self.numdefect_n=0
                         self.defects_n=[]
                         char_n=0
                 elif field == 'velocity':
-                        print "Looking for velocity field defects!"
+                        print("Looking for velocity field defects!")
                         self.numdefect_v=0
                         self.defects_v=[]
                         char_v=0
                 else:
-                        print "Unknown symmetry type, aborting!"
+                        print("Unknown symmetry type, aborting!")
                         return 1
 		if symtype=='oldnematic':
-			print "Tracking nematic defects with the Goldenfeld algorithm!"
+			print("Tracking nematic defects with the Goldenfeld algorithm!")
 		elif symtype=='polar':
-			print "Tracking polar defects!"
+			print("Tracking polar defects!")
 		elif symtype=='nematic':
-			print "Tracking nematic defects!"
+			print("Tracking nematic defects!")
 		else:
-			print "Unknown alignment symmetry type! Not tracking defects!"
+			print("Unknown alignment symmetry type! Not tracking defects!")
 			return 1
 		for u in range(len(self.LoopList)):
 			thisLoop=self.LoopList[u]
@@ -90,8 +90,8 @@ class Defects:
 			else:
 				charge=self.computeDefect(thisLoop,field,symtype)
 			if abs(charge)>0:
-				print "Found Defect in " + field + " field!"
-				print charge
+				print("Found Defect in " + field + " field!")
+				print(charge)
 				if field == 'orientation':
                                         char_n+=charge
                                 else:
@@ -114,12 +114,12 @@ class Defects:
                                         self.defects_v.append(defbit)
                                         self.numdefect_v+=1
                 if field == 'orientation':
-                        print 'Number of orientation field defects: ' + str(self.numdefect_n)
-                        print 'Total charge of orientation field defects: ' + str(char_n)
+                        print('Number of orientation field defects: ' + str(self.numdefect_n))
+                        print('Total charge of orientation field defects: ' + str(char_n))
                         return self.defects_n, self.numdefect_n
                 else:
-                        print 'Number of velocity field defects: ' + str(self.numdefect_v)
-                        print 'Total charge of velocity field defects: ' + str(char_v)
+                        print('Number of velocity field defects: ' + str(self.numdefect_v))
+                        print('Total charge of velocity field defects: ' + str(char_v))
                         return self.defects_v,self.numdefect_v
                                         
 			
@@ -178,7 +178,7 @@ class Defects:
                         elif symtype == 'polar':
                                 theta=np.arccos(ctheta)*np.sign(stheta)
                         else:
-                                print "Unknown symmetry type, doing nothing"
+                                print("Unknown symmetry type, doing nothing")
                                 theta=0.0
                         #print theta
                         thetatot+=theta
@@ -192,11 +192,11 @@ class Defects:
                         charge=int(round(thetatot/(2*np.pi)))
 		if self.verbose:
                         if abs(charge)>0.1:
-                                print "Found potential defect:"
-                                print charge
-                                print self.theta[t]
-                                print self.phi[t]
-                                print self.conf.rval[t,:]
+                                print("Found potential defect:")
+                                print(charge)
+                                print(self.theta[t])
+                                print(self.phi[t])
+                                print(self.conf.rval[t,:])
                                 #if charge>0:
                                         #self.ax.scatter(self.conf.rval[t,0], self.conf.rval[t,1], self.conf.rval[t,2],marker='o',s=50,color='r')
                                 #else:
@@ -207,11 +207,11 @@ class Defects:
                         if self.theta[t]<self.THETAMIN:
                             charge=0
                             if self.verbose:
-                                    print "nuked this " + field + " field defect"
+                                    print("nuked this " + field + " field defect")
                         if self.theta[t]>(np.pi-self.THETAMIN):
                             charge=0
                             if self.verbose:
-                                    print "nuked this " + field + " field defect"
+                                    print("nuked this " + field + " field defect")
                 return charge
             
             
@@ -235,7 +235,7 @@ class Defects:
 				coord.append(np.sign(ctheta)*self.conf.vhat[thisLoop[t],:])
 				# Find out if the last point and the starting point are in the same hemisphere. 
                         else:
-                                print "Unknown field, doing nothing"
+                                print("Unknown field, doing nothing")
                                 return 0
 		cdefect=np.dot(coord[t],coord[0])
 		if cdefect<0:
@@ -248,10 +248,10 @@ class Defects:
 		if HAS_MATPLOTLIB:
 			fig = plt.figure()
 			ax = fig.add_subplot(111, projection='3d')
-			print self.defects_n
+			print(self.defects_n)
 			ax.scatter(self.conf.rval[:,0], self.conf.rval[:,1], self.conf.rval[:,2], zdir='z', c='b',s=4)
 			ax.scatter(self.defects_n[:][1], self.defects_n[:][2], self.defects_n[:][3], zdir='z', c='r',s=50)
 			ax.scatter(self.defects_v[:][1], self.defects_v[:][2], self.defects_v[:][3], zdir='z', c='g',s=50)
 		else:
-			print 'Error: Matplotlib does not exist on this machine, cannot plot system and defects'
+			print('Error: Matplotlib does not exist on this machine, cannot plot system and defects')
 		

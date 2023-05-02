@@ -41,7 +41,7 @@ class ReadData:
       
   def __read_data(self):
     lines = self.inp.readlines()
-    lines = map(lambda x: x.strip(), lines)
+    lines = [x.strip() for x in lines]
     if lines[0][0] == '#':
       self.has_header = True
     else:
@@ -56,7 +56,7 @@ class ReadData:
     else:
       self.data = [[] for i in range(len(lines[0].split()))]
     for line in lines:
-      data_line = map(float, line.split())
+      data_line = list(map(float, line.split()))
       for i in range(len(data_line)):
         self.data[i].append(data_line[i])
 

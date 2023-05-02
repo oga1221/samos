@@ -34,21 +34,21 @@ parser.add_argument("-p", "--p1", type=int, default=0, help="id of the 1st parti
 parser.add_argument("-q", "--p2", type=int, default=1, help="id of the 2nd particle to track")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tInterparticle distance over time"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
-print "\tId of 1st particle : ", args.p1
-print "\tId of 2nd particle : ", args.p2
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tInterparticle distance over time")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
+print("\tId of 1st particle : ", args.p1)
+print("\tId of 2nd particle : ", args.p2)
+print()
 
 start = datetime.now()
 
@@ -64,7 +64,7 @@ out.write('# timestep dist n1_dot_n2  v1_dot_v2\n')
 
 idx = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   timestep = int(f.split('_')[-1].split('.')[0])
   
@@ -93,6 +93,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

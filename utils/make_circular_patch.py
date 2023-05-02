@@ -42,20 +42,20 @@ parser.add_argument("-m", "--min_dist", type=float, default=1.5, help="minium di
 parser.add_argument("-A", "--A0", type=float, default=m.pi, help="native cell area")
 args = parser.parse_args()
 
-print
-print "\tSoft Actve Matter on Surfaces (SAMoS)"
-print "\tGenerates a circial cell patch"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2015"
-print "\t----------------------------------------------"
-print
-print "\tOutput files : ", args.output
-print "\tPatch radius : ", args.radius
-print "\tNumber of cells : ", args.num
-print "\tMinimum distance between cells : ", args.min_dist
-print
+print()
+print("\tSoft Actve Matter on Surfaces (SAMoS)")
+print("\tGenerates a circial cell patch")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2015")
+print("\t----------------------------------------------")
+print()
+print("\tOutput files : ", args.output)
+print("\tPatch radius : ", args.radius)
+print("\tNumber of cells : ", args.num)
+print("\tMinimum distance between cells : ", args.min_dist)
+print()
 
 start = datetime.now()
 
@@ -79,7 +79,7 @@ while i < args.num:
       if not can_add: 
         break
     if can_add:
-      print "Successfully added particle : ", i
+      print("Successfully added particle : ", i)
       particles.append((x,y))
       cl.add_particle((x,y),i)
       i += 1
@@ -97,6 +97,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

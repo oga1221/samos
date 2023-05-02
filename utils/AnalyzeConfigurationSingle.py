@@ -52,49 +52,49 @@ args = parser.parse_args()
 
 
 filename=args.directory  + '/' + args.input
-print filename
+print(filename)
 box = [args.lx, args.ly, args.lz]
 conf = Configuration(filename,args.geometry,box)
 writeme = Writer(args.nematic)
 if args.writeP:
   outparticles = args.output + '/'+ args.prefix + '_particles.vtp' 
-  print outparticles
+  print(outparticles)
   writeme.writeConfigurationVTK(conf,outparticles)
 #plt.show()
 if args.getStatsBasic:
   vel2av, phival,ndensity,zav=conf.getStatsBasic()
   #vel2av[u], phival[u],pressav[u],energy[u]= conf.getStatsBasic()
-  print "Mean square velocity: " + str(vel2av)
-  print "Packing fraction: " + str(phival)
-  print "Number density: " + str(ndensity)
-  print "Contact number: " + str(zav)
+  print("Mean square velocity: " + str(vel2av))
+  print("Packing fraction: " + str(phival))
+  print("Number density: " + str(ndensity))
+  print("Contact number: " + str(zav))
 if args.writeD or args.writeT:
   conf.getTangentBundle()
   tess = Tesselation(conf)
-  print "initialized tesselation"
+  print("initialized tesselation")
   #LoopList,Ival,Jval = tess.findLoop(args.closeHoles,args.mult,1.1)
   LoopList,Ival,Jval = tess.findLoopDelaunay()
-  print "found loops"
+  print("found loops")
   #print LoopList
   if args.writeD:
     #print "Still to be done ..."
     outdefects = args.output + '/' + args.prefix + '_defects.vtp'
-    print outdefects
+    print(outdefects)
     defects = Defects(tess,conf)
     # Look for nematic defects in the director field, but do not look for velocity defects (since it's a mess)
     if args.nematic:
       defects_n, defects_v,numdefect_n,numdefect_v=defects.getDefects('nematic',False)
     else:
       defects_n, defects_v,numdefect_n,numdefect_v=defects.getDefects('polar')
-    print "found defects"
+    print("found defects")
     writeme.writeDefects(defects_n, defects_v,numdefect_n,numdefect_v,outdefects)
   if args.writeT:
     outpatches = args.output + '/' + args.prefix + '_patches.vtp'
-    print outpatches
+    print(outpatches)
     if args.makeEdges:
       tess.makeEdges(3.0)   
     tess.OrderPatches()
-    print "ordered patches"
+    print("ordered patches")
     writeme.writePatches(tess,outpatches,True)
                   
 

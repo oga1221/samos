@@ -80,14 +80,14 @@ class ReadConf:
   def __init__(self, file_name):
     with open(file_name) as inp:
       # strip strips junk like tabs, empty spaces etc. map applies (lambda) function to every element of the list
-      conf = map(lambda x: x.strip(), inp.readlines()) 
+      conf = [x.strip() for x in inp.readlines()] 
       # only lines longer than zero and don't start with '#'
-      self.commands = filter(lambda x: len(x) > 0 and x[0] != '#', conf) 
+      self.commands = [x for x in conf if len(x) > 0 and x[0] != '#'] 
       self.key_words = {}    #   keyword dictionary
       for comm_line in self.commands: 
         comm = comm_line.split()[0]            # split string at spaces into words; first part goes into comm
         rest = ' '.join(comm_line.split()[1:]) # all the rest goes here, joined up again
-        if self.key_words.has_key(comm):
+        if comm in self.key_words:
           self.key_words[comm].append(Parameter(rest))
         else:
           self.key_words[comm] = [Parameter(rest)]

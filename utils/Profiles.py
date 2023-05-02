@@ -44,7 +44,7 @@ class Profiles:
 			self.direction=np.sum(np.cross(conf.rval,conf.vval),axis=0)
 		# Otherwise we can't do this since it's going to be close to 0
 		else:
-			print "doing nematic case!"
+			print("doing nematic case!")
 			# Be a bit better here. The moment of inertia tensor should have *some* kind of signature
 			# Take this as an initial guess of the axis. Compare the two later.
 			Itensor=np.einsum('ik,ij->kj',conf.rval,conf.rval)
@@ -60,7 +60,7 @@ class Profiles:
 			# is a squashed thing with the z axis in the squattest direction
 			idx=np.argmin(eigval)
 			inertialz=eigvec[:,idx]
-			print inertialz 
+			print(inertialz) 
 			
 			directions=np.cross(conf.rval,conf.vval)
 			# Those should then now be mostly either aligned or antialigned
@@ -69,25 +69,25 @@ class Profiles:
 			normdir=np.sqrt(directions[:,0]**2+directions[:,1]**2+directions[:,2]**2)
 			dirnorm=((directions).transpose()/(normdir).transpose()).transpose()
 			orient=np.round(dirnorm[:,0]*inertialz[0]+dirnorm[:,1]*inertialz[1]+dirnorm[:,2]*inertialz[2])
-			print orient
-			print sum(orient)
-			print sum(orient**2)/len(conf.rval)
+			print(orient)
+			print(sum(orient))
+			print(sum(orient**2)/len(conf.rval))
 			self.direction=np.einsum('ij,i->j',directions,orient)
 			#self.direction=np.empty((len(conf.vval),3))
 			#self.direction[:,0]=directions[:,0]*orient
 			#self.direction[:,1]=directions[:,1]*orient
 			#self.direction[:,2]=directions[:,2]*orient
 		self.orderpar=self.direction/len(conf.rval)
-		print self.orderpar
+		print(self.orderpar)
 		#self.direction = self.direction/np.linalg.norm(self.direction)
 		self.direction=inertialz
-		print self.direction
+		print(self.direction)
 		# to plot, make this a line ...
 		
 		axis = np.cross(self.direction,ez)
 		axis = axis/np.linalg.norm(axis)
 		rot_angle = np.arccos(np.dot(self.direction,ez))
-		print rot_angle
+		print(rot_angle)
 		axis0 = np.empty(np.shape(self.conf.rval))
 		axis0[:,0] = axis[0]
 		axis0[:,1] = axis[1]
@@ -102,7 +102,7 @@ class Profiles:
 				ax.plot([0,0],[0,0],[-self.geom.R,self.geom.R],'o-g')
 				ax.plot([-self.geom.R*axis[0],self.geom.R*axis[0]],[-self.geom.R*axis[1],self.geom.R*axis[1]],[-self.geom.R*axis[2],self.geom.R*axis[2]],'o-k')
 			else:
-				print 'Error: Matplotlib does not exist on this machine, cannot plot system'
+				print('Error: Matplotlib does not exist on this machine, cannot plot system')
 		self.conf.rotateFrame(axis0,rot_angle)
 		# Need to redo the cell list after the rotation
 		self.conf.redoCellList()
@@ -173,7 +173,7 @@ class Profiles:
 				ax = fig.add_subplot(111, projection='3d')
 				ax.scatter(self.conf.rval[:,0], self.conf.rval[:,1], self.conf.rval[:,2], zdir='z', c='b')
 			else:
-				print 'Error: Matplotlib does not exist on this machine, cannot plot system'
+				print('Error: Matplotlib does not exist on this machine, cannot plot system')
 			
 		return [theta_out,rho_profile,vel_profile,eng_profile,press_profile,s_tt_profile,s_tp_profile,s_pt_profile,s_pp_profile,alpha_profile,alpha_v_profile,self.direction,self.orderpar]
         

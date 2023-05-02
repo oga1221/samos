@@ -108,28 +108,28 @@ parser.add_argument("-n", "--bin", type=int, default=25, help="number of bins fo
 parser.add_argument("-s", "--skip", type=int, default=0, help="skip this many samples")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tPotential energy profile"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
-print "\tInput : ", args.input
-print "\tOutput : ", args.output
-print "\tSpring constant : ", args.k
-print "\tRadius of the sphere : ", args.sphere_r
-print "\tNumber of angle average bins : ", args.bin
-print "\tSkip frames : ", args.skip
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tPotential energy profile")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
+print("\tInput : ", args.input)
+print("\tOutput : ", args.output)
+print("\tSpring constant : ", args.k)
+print("\tRadius of the sphere : ", args.sphere_r)
+print("\tNumber of angle average bins : ", args.bin)
+print("\tSkip frames : ", args.skip)
+print() 
 
 
 start = datetime.now()
 
 files = sorted(glob(args.input+'*.dat'))[args.skip:]
-print files
+print(files)
 #print "Reading data..."
 #data = ReadData(args.input)
 
@@ -142,7 +142,7 @@ tot_avg_overlap = [0 for i in range(args.bin+1)]
 tot_nval = [0 for i in range(args.bin+1)]
 tot = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   inertia = Inertia(data)
   I = inertia.compute()   # Compute moment of inertia
@@ -163,17 +163,17 @@ for f in files:
   vrot = rotate_vectorial(r,n,-rot_angle)
   #ptsnew = appendSpherical_np(vrot)
   theta = appendSpherical_np(vrot)
-  print "Computing potential energy..."
+  print("Computing potential energy...")
   eng, press, overlap = compute_energy_and_pressure(vrot,args.k)
-  print "Computing velocity magnitude..."
+  print("Computing velocity magnitude...")
   vel = np.sqrt(vx**2 + vy**2 + vz**2)
-  print "Computing angular average..."
+  print("Computing angular average...")
   #theta = ptsnew[:,4]
   t_max, t_min = 180.0, 0.0#max(theta), min(theta)
   dtheta = (t_max-t_min)/args.bin
-  print 't_min = ', t_min
-  print 't_max = ', t_max
-  print 'dt = ', dtheta
+  print('t_min = ', t_min)
+  print('t_max = ', t_max)
+  print('dt = ', dtheta)
  
   avg_theta = [0 for i in range(args.bin+1)]
   avg_v = [0 for i in range(args.bin+1)]
@@ -190,7 +190,7 @@ for f in files:
     nval[idx] += 1
     
   
-  for idx in xrange(len(avg_theta)):
+  for idx in range(len(avg_theta)):
     if nval[idx] != 0: 
       tot_avg_theta[idx] += avg_theta[idx]/float(nval[idx])
       tot_avg_v[idx] += avg_v[idx]/float(nval[idx])
@@ -225,7 +225,7 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 

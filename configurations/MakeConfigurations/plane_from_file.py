@@ -55,10 +55,10 @@ class Plane:
     min_x, max_x = np.min(data[:,0]), np.max(data[:,0])
     min_y, max_y = np.min(data[:,1]), np.max(data[:,1])
     Lx, Ly = max_x - min_x, max_y - min_y
-    print "Lx = ", Lx
-    print "Ly = ", Ly
+    print("Lx = ", Lx)
+    print("Ly = ", Ly)
     N = data.shape[0]
-    self.particles = [Particle(i) for i in xrange(N)]
+    self.particles = [Particle(i) for i in range(N)]
     for i in range(N):
       x, y, nx, ny = data[i]
       self.particles[i].r = [x-0.5*Lx,y-0.5*Ly,0.0]
@@ -71,15 +71,15 @@ class Plane:
       p.v = [vav*cos(phi),vav*sin(phi),0.0]
   
   def set_radius(self,radii):
-    for i in xrange(len(radii)):
+    for i in range(len(radii)):
       self.particles[i].R = radii[i]
   
   def set_type(self,types):
-    for i in xrange(len(types)):
+    for i in range(len(types)):
       self.particles[i].tp = types[i]
   
   def set_lens(self,lens):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].l = lens[i]
   
   def write(self,outfile):
@@ -107,24 +107,24 @@ parser.add_argument("--l2",  type=float, default=1.0, help="length of rod of typ
 args = parser.parse_args()
 
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014, 2015"
-print "\t----------------------------------------------"
-print 
-print "\tinput file : ", args.input
-print "\tAverage velocity : ", args.vavr
-print "\tOutput file : ", args.output
-print "\tFraction of particles of type 1 : ", args.eta
-print "\tRadius of particles of type 1 : ", args.a1
-print "\tRadius of particles of type 2 : ", args.a2
-print "\tLength of particles of type 1 (in units of radius) : ", args.l1
-print "\tLength of particles of type 2 (in units of radius) : ", args.l2
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014, 2015")
+print("\t----------------------------------------------")
+print() 
+print("\tinput file : ", args.input)
+print("\tAverage velocity : ", args.vavr)
+print("\tOutput file : ", args.output)
+print("\tFraction of particles of type 1 : ", args.eta)
+print("\tRadius of particles of type 1 : ", args.a1)
+print("\tRadius of particles of type 2 : ", args.a2)
+print("\tLength of particles of type 1 (in units of radius) : ", args.l1)
+print("\tLength of particles of type 2 (in units of radius) : ", args.l2)
+print() 
 
 start = datetime.now()
 
@@ -136,7 +136,7 @@ p = Plane(args.input, args.vavr)
 radii = []
 types = []
 lens = []
-for i in xrange(len(p.particles)):
+for i in range(len(p.particles)):
   if i < args.eta*len(p.particles): 
     radii.append(args.a1)
     types.append(1)
@@ -154,6 +154,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

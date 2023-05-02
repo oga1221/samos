@@ -79,15 +79,15 @@ class PlaneRods:
       p.n = [cos(phi),sin(phi),0.0]
   
   def set_radius(self,radii):
-    for i in xrange(len(radii)):
+    for i in range(len(radii)):
       self.particles[i].R = radii[i]
   
   def set_type(self,types):
-    for i in xrange(len(types)):
+    for i in range(len(types)):
       self.particles[i].tp = types[i]
   
   def set_lens(self,lens):
-    for i in xrange(len(lens)):
+    for i in range(len(lens)):
       self.particles[i].l = lens[i]
   
   def write(self,outfile):
@@ -117,32 +117,32 @@ args = parser.parse_args()
 
 
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013, 2014, 2015"
-print "\t----------------------------------------------"
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013, 2014, 2015")
+print("\t----------------------------------------------")
+print() 
 
 
 start = datetime.now()
 
 
 N = int(args.phi*args.laverage**2/(2*args.length*args.sigma+pi*args.sigma**2))
-print N
+print(N)
 aspect = (args.length+2*args.sigma)/(2.0*args.sigma)
-print aspect
+print(aspect)
 nx=int(sqrt(N)/aspect)
 ny=int(sqrt(N)*aspect)
 lx=aspect*args.laverage*nx/sqrt(N)
 ly=args.laverage*ny/(aspect*sqrt(N))
-print nx
-print ny
-print lx
-print ly
+print(nx)
+print(ny)
+print(lx)
+print(ly)
 
 
 random_orient = args.orient
@@ -152,7 +152,7 @@ p = PlaneRods(lx, ly, nx,ny, args.vavr, random_orient=random_orient)
 radii = []
 types = []
 lens = []
-for i in xrange(len(p.particles)): 
+for i in range(len(p.particles)): 
   radii.append(args.sigma)
   types.append(1)
   lens.append(args.length)
@@ -165,6 +165,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

@@ -35,12 +35,12 @@ def uniformkernel(wl):
     return unif
 
 def quartic_wl(wl):
-    if verb: print 'generating smoothing function with wl = ', wl
+    if verb: print(('generating smoothing function with wl = ', wl))
     def quartic(r):
         return 5/(np.pi*wl**2) * (1 + 3*(r/wl))*(1-(r/wl))**3 if r < wl else 0. 
         #return 5/(4* np.pi*wl) * (1 + 3*(r/wl))*(1-(r/wl))**3 if r < wl else 0. 
     space = np.linspace(0, wl, 100, True)
-    qq = np.array(map(quartic, space))
+    qq = np.array(list(map(quartic, space)))
     ii = integrate.simps(qq* space*2*np.pi, space)
     # assert ii is close to 1
     #io.plotrange(quartic, 0, wl)
@@ -49,7 +49,7 @@ def quartic_wl(wl):
 def hash_function(f, linspace):
     l = linspace[-1] - linspace[0]
     ne = len(linspace)
-    hf = map(f, linspace)
+    hf = list(map(f, linspace))
     def nf(r):
         i = int(round((ne-1) * r/l))
         return hf[i]
@@ -68,7 +68,7 @@ class Tracker(object):
     def update(self, pv, xxv):
         fileo = self.fileo
         foutname = '_'.join([fileo, xxv]) + '.pkl'
-        if verb: print 'saving radial data to ', foutname
+        if verb: print(('saving radial data to ', foutname))
         self.foutname = foutname
         self._update(pv)
 
@@ -90,10 +90,10 @@ class FPickler(Tracker):
     def _update(self, pv):
         forces = pv.tri.forces
         bulkforces = [forces[i] for i in pv.tri.bulk]
-        avg_force = np.mean(map(norm, bulkforces))
+        avg_force = np.mean(list(map(norm, bulkforces)))
         self.outd['avg_force'] = avg_force
         vforces = [pv.mesh.vertex_forces[i] for i in mesh.bulk]
-        self.outd['avg_vertex_force'] = np.mean(map(norm, vforces))
+        self.outd['avg_vertex_force'] = np.mean(list(map(norm, vforces)))
         with open(self.foutname, 'wb') as fo:
             pickle.dump(self.outd, fo)
 
@@ -130,7 +130,7 @@ class Senario(object):
         inp_file = args.input
         infiles = sorted(glob.glob(inp_file))
         if infiles == []:
-            print 'Did not find any files using %s', inp_file
+            print(('Did not find any files using %s', inp_file))
             sys.exit()
 
         runfiles = []
@@ -145,7 +145,7 @@ class Senario(object):
             return infiles
         else:
             # Use the start and stop numbers to cut down the input files ot a managable number
-            onums = map(lambda s: int(f_outnum(s)), infiles)
+            onums = [int(f_outnum(s)) for s in infiles]
             starti = onums.index(args.start) if args.start else 0
             stopi = onums.index(args.stop)+1 if args.stop else len(onums)
             infiles = infiles[starti:stopi]
@@ -155,13 +155,13 @@ class Senario(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         step = self.args.step
         if self.fid < self.numf:
             self.dataf = self.infiles[self.fid]
             self.inp_dir, base_file = path.split(self.dataf)
             self.outnum = f_outnum(self.dataf)
-            print 'working on file number ', self.outnum
+            print(('working on file number ', self.outnum))
             try:
                 self._operate()
             except:
@@ -184,7 +184,7 @@ class Senario(object):
 
             if not os.listdir(ex):
                 os.rmdir(ex)
-                print 'successfully cleaned up {}'.format(ex)
+                print(('successfully cleaned up {}'.format(ex)))
 
     def save_parameters(self, paramsf='out.parameters'):
         with open(paramsf, 'w') as fp:
@@ -267,7 +267,7 @@ class Property(Senario):
         # Get the typed area distribution object
             areatp = pv.type_area()
             self.areas_main(areatp)
-            print pv.mesh.prims
+            print((pv.mesh.prims))
 
         if args.texture:
             pv.makecellparts()
@@ -301,8 +301,8 @@ class Property(Senario):
 
         adiff = np.subtract(realareas, np.full(len(bulk), max_area))
         adiff[adiff < 0] = 0 #replace negative values with 0
-        print adiff
-        adiff = dict(zip(bulk, adiff))
+        print(adiff)
+        adiff = dict(list(zip(bulk, adiff)))
 
         # now radially average
         mrc = np.max(rcmd)
@@ -319,10 +319,10 @@ class Property(Senario):
 
 
     def areas_main(self, areatp):
-        for tp, areas in areatp.items():
+        for tp, areas in list(areatp.items()):
 
-            print 'mean areas, type = {}'.format(tp)
-            print np.mean(areas), len(areas)
+            print(('mean areas, type = {}'.format(tp)))
+            print((np.mean(areas), len(areas)))
             plt.clf()
             plt.hist(areas, bins=30, alpha=0.6)
             plt.title('area distribution. type={}'.format(tp))
@@ -370,7 +370,7 @@ class Property(Senario):
 class Stress_Senario(Senario):
     def __init__(self, args):
         super(Stress_Senario, self).__init__(args)
-        print 'initializing the run generator'
+        print('initializing the run generator')
         wl= args.wl
 
         self.fileo=  os.path.join(args.dir, 'stress_st') 
@@ -384,11 +384,11 @@ class Stress_Senario(Senario):
 
         self.ref_index = None
         if args.ref:
-            nums = map(f_outnum, self.infiles)
+            nums = list(map(f_outnum, self.infiles))
             # string comparision 
             self.ref_index = nums.index(args.ref)
         else:
-            print 'Warning: reference timestep not set for calculating Strain'
+            print('Warning: reference timestep not set for calculating Strain')
             self.ref_index = 0
         self.ref_structure = None
 
@@ -416,7 +416,7 @@ class Stress_Senario(Senario):
             self.test_convergence(pv)
 
         # for real 
-        print 'stress averaging adj = ', args.adj
+        print(('stress averaging adj = ', args.adj))
         adjlist = [0, args.adj]
         self.calculate_U(pv, adjlist)
 
@@ -457,17 +457,17 @@ class Stress_Senario(Senario):
                 shear = (eva[0] - eva[1])/2
                 trace = (eva[0] + eva[1])/2
                 return eva, evec, trace, shear
-            ll = map(orderedst, zip(evals, evecs))
+            ll = list(map(orderedst, list(zip(evals, evecs))))
             # transpose list of list
-            rll = map(list, zip(*ll)) 
+            rll = list(map(list, list(zip(*ll)))) 
             # cleanup
-            return map(np.array, rll)
+            return list(map(np.array, rll))
             
         for adjn in adjlist:
             adjstr = pv.structure_on_centres(adjn)
             structure_xx[adjn] = adjstr
             #evecs, evals = lg.eig(np.array(adjstr.values())[:,:2,:2])
-            evals, evecs, trace, shear = decompose(np.array(adjstr.values()))
+            evals, evecs, trace, shear = decompose(np.array(list(adjstr.values())))
 
             xx_trace[adjn] = trace 
             xx_shear[adjn] = shear
@@ -576,15 +576,15 @@ class MSD(Senario):
         # Now divide up the block using numpy indexing
         posarr = np.column_stack([x,y,z])
         postp = {}
-        for tp, posids in tpids.items():
+        for tp, posids in list(tpids.items()):
             postp[tp] = posarr[posids]
 
         self.timeline.append(outnum)
         self.posarrlist.append(postp)
         if not self.types:
-            self.types  = postp.keys()
+            self.types  = list(postp.keys())
         else:
-            assert self.types == postp.keys(), \
+            assert self.types == list(postp.keys()), \
                 'All the same types should exist throughout the simulation'
 
         # cell growth, assume no environment
@@ -601,20 +601,20 @@ class MSD(Senario):
             return np.mean(np.sum(disp*disp, 1))
         # construct the 3d block: time, particle, xyz coord
         # assume particles are not dividing
-        blocks = dict(zip(self.types, [[] for _ in range(len(self.types))]))
-        print blocks
+        blocks = dict(list(zip(self.types, [[] for _ in range(len(self.types))])))
+        print(blocks)
         # has to be done for each type
         for postp in self.posarrlist:
-            for tp, posarr in postp.items():
+            for tp, posarr in list(postp.items()):
                 blocks[tp].append(posarr)
 
         # {tp:msd}
-        self.msd = dict(zip(self.types, [[] for _ in range(len(self.types))]))            
+        self.msd = dict(list(zip(self.types, [[] for _ in range(len(self.types))])))            
         # 
-        for tp, block in blocks.items():
+        for tp, block in list(blocks.items()):
             # Finally construct the numpy block
             allblock = np.rollaxis(np.dstack(block), 2, 0)
-            taulist = range(len(self.timeline)/2)
+            taulist = list(range(len(self.timeline)/2))
             for tau in taulist:
                 msdval = []
                 for i in range(tau, len(self.timeline)-tau):
@@ -686,13 +686,13 @@ class Transitions(Senario):
     def _finishup(self):
         #print 'finished'
         if self.tlist and hasattr(self.tlist, 'nt'):
-            print 'total t1 transitions', self.tlist.nt
+            print(('total t1 transitions', self.tlist.nt))
         else:
-            print 'Did not produce a tlist object'
+            print('Did not produce a tlist object')
 
     def _halfedges(self, simp):
-        lamhedges = lambda si: zip(si, np.roll(si, -1))
-        hearr = np.array(map(lamhedges, simp))
+        lamhedges = lambda si: list(zip(si, np.roll(si, -1)))
+        hearr = np.array(list(map(lamhedges, simp)))
         # all halfedges
         hearr= hearr.reshape(-1, hearr.shape[-1])
         return set(map(tuple, hearr))

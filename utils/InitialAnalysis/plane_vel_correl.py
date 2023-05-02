@@ -37,22 +37,22 @@ parser.add_argument("-s", "--skip", type=int, default=0, help="skip this many sa
 parser.add_argument("-d", "--director", action="store_true", help="compute time correlations of the director (velocity is default)")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tComputes time correlation function of velocity"
-print "\tor director field on plane"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tComputes time correlation function of velocity")
+print("\tor director field on plane")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
 if args.director:
-  print "\tCompute time correlation of the director field."
-print
+  print("\tCompute time correlation of the director field.")
+print()
 
 start = datetime.now()
 
@@ -66,7 +66,7 @@ else:
 vals = []
 idx = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   frame = []
   if data.has_header:
@@ -77,10 +77,10 @@ for f in files:
 
 time_file = open(args.output,'w')
 
-print "Computing averages..."
+print("Computing averages...")
 
 for tau in range(0,len(vals)-1):
-  print "Processing tau : ", tau
+  print("Processing tau : ", tau)
   avg_tau = 0.0
   for t in range(0,len(vals)-tau):
     frame1 = vals[t][1]
@@ -100,6 +100,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

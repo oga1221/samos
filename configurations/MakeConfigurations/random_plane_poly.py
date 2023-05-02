@@ -67,11 +67,11 @@ class Plane:
       p.n = [cos(phi),sin(phi),0.0]
   
   def set_radius(self,radii):
-    for i in xrange(len(radii)):
+    for i in range(len(radii)):
       self.particles[i].R = radii[i]
   
   def set_type(self,types):
-    for i in xrange(len(types)):
+    for i in range(len(types)):
       self.particles[i].tp = types[i]
   
   def write(self,outfile):
@@ -99,30 +99,30 @@ args = parser.parse_args()
 #N = int(round(1.0/pi*args.lx*args.ly*args.phi/(args.eta*args.a1**2+(1-args.eta)*args.a2**2)))
 N = int(round(1.0/pi*args.lx*args.ly*args.phi))
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of a random flat configuration (xy plane)"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2013"
-print "\t----------------------------------------------"
-print 
-print "\tLx : ", args.lx
-print "\tLy : ", args.ly
-print "\tPacking fraction : ", args.phi
-print "\tNumber of particles : ", N
-print "\tAverage velocity : ", args.vavr
-print "\tOutput file : ", args.output
-print "\tPolydispersity :", args.poly
-print 
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of a random flat configuration (xy plane)")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2013")
+print("\t----------------------------------------------")
+print() 
+print("\tLx : ", args.lx)
+print("\tLy : ", args.ly)
+print("\tPacking fraction : ", args.phi)
+print("\tNumber of particles : ", N)
+print("\tAverage velocity : ", args.vavr)
+print("\tOutput file : ", args.output)
+print("\tPolydispersity :", args.poly)
+print() 
 
 start = datetime.now()
 
 p = Plane(args.lx, args.ly, N, args.vavr)
 radii = []
 types = []
-for i in xrange(N):
+for i in range(N):
     radii.append(uniform(1-0.5*args.poly,1+0.5*args.poly))
     types.append(1)
 p.set_radius(radii)
@@ -133,6 +133,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

@@ -131,22 +131,22 @@ parser.add_argument("-y", "--sy", type=float, default=1.0, help="scale in y dire
 parser.add_argument("-b", "--boundary", type=str, default=None, help="boundary particles")
 args = parser.parse_args()
 
-print
-print "\tSoft Active Matter on Surfaces (SAMoS)"
-print "\tBuilding a regular hexagonal patch on a plane"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2018"
-print "\t----------------------------------------------"
-print 
-print "\tLattice constant : ", args.a
-print "\tNumber of layers : ", args.n
-print "\tAverage velocity : ", args.vavr
-print "\tOutput file : ", args.output
+print()
+print("\tSoft Active Matter on Surfaces (SAMoS)")
+print("\tBuilding a regular hexagonal patch on a plane")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2018")
+print("\t----------------------------------------------")
+print() 
+print("\tLattice constant : ", args.a)
+print("\tNumber of layers : ", args.n)
+print("\tAverage velocity : ", args.vavr)
+print("\tOutput file : ", args.output)
 if args.boundary != None:
-  print "\tBoundary file : ", args.boundary
-print 
+  print("\tBoundary file : ", args.boundary)
+print() 
 
 start = datetime.now()
 
@@ -160,6 +160,6 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()

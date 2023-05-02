@@ -37,7 +37,7 @@ class ReadData:
       
   def __read_data(self):
 	lines = self.lines.split('\n')
-	lines = map(lambda x: x.strip(), lines)
+	lines = [x.strip() for x in lines]
 	if lines[0][0] == '#':
 	  self.has_header = True
 	elif lines[0][0:5] == 'keys:':
@@ -56,7 +56,7 @@ class ReadData:
 		  for k in keys: self.keys[k] = keys.index(k)
 		  #print keys
 		  nheader+=1
-		  if (self.keys.has_key('id')) or (self.keys.has_key('type')) or (self.keys.has_key('radius')) or(self.keys.has_key('x')):
+		  if ('id' in self.keys) or ('type' in self.keys) or ('radius' in self.keys) or('x' in self.keys):
 			read_keys=True
 		elif lines[0][0:5] == 'keys:':
 		  header = lines[nheader].strip()[6:]
@@ -64,17 +64,17 @@ class ReadData:
 		  self.keys = OrderedDict()
 		  for k in keys: self.keys[k] = keys.index(k)
 		  nheader+=1
-		  if (self.keys.has_key('id')) or (self.keys.has_key('type')) or (self.keys.has_key('radius')) or(self.keys.has_key('x')):
+		  if ('id' in self.keys) or ('type' in self.keys) or ('radius' in self.keys) or('x' in self.keys):
 			read_keys=True
 		else:
-		  print "Error: There are no keys for these file, just comments! Cannot determine type of input!"
+		  print("Error: There are no keys for these file, just comments! Cannot determine type of input!")
 		  #print "Found " + str(nheader) + " lines of comments and keys "
 		lines = lines[nheader:]
 		self.data = [[] for i in range(len(keys))]
 	else:
 	  self.data = [[] for i in range(len(lines[0].split()))]
 	for line in lines:
-	  data_line = map(float, line.split())
+	  data_line = list(map(float, line.split()))
 	  for i in range(len(data_line)):
 		self.data[i].append(data_line[i])
 

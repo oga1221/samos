@@ -135,7 +135,7 @@ class Writer:
 		# Preparing the vtp output
 		# Create point structure in vtk
 		Points = vtk.vtkPoints()
-		print "Created Points"
+		print("Created Points")
 		Charge = vtk.vtkDoubleArray()
 		Charge.SetNumberOfComponents(1)
 		Charge.SetName('Charge')
@@ -162,7 +162,7 @@ class Writer:
 		#polydata.SetLines(lines)
 		polydata.GetPointData().AddArray(Charge)
 		
-		print "Finished Polydata"
+		print("Finished Polydata")
 		polydata.Modified()
 		writer = vtk.vtkXMLPolyDataWriter()
 		writer.SetFileName(outfile)
@@ -175,10 +175,10 @@ class Writer:
 		writer.SetDataModeToBinary()
                 writer.SetCompressorTypeToZLib()
 		writer.Write()
-		print "Wrote File"
+		print("Wrote File")
 		
 	def writePatches(self,tess,outname,contractile=False):
-		print outname
+		print(outname)
 		points = vtk.vtkPoints()
 		polygons = vtk.vtkCellArray()
 		v=0
@@ -221,13 +221,13 @@ class Writer:
                         pass
 		contractile = False
 		if contractile:
-                        print "Are we actually going here??"
+                        print("Are we actually going here??")
 			press_c=tess.computeContractile(self.alpha)
-			print press_c
-			print np.mean(press_c)
-			print np.std(press_c)
-			print np.min(press_c)
-			print np.max(press_c)
+			print(press_c)
+			print(np.mean(press_c))
+			print(np.std(press_c))
+			print(np.min(press_c))
+			print(np.max(press_c))
 			press+=press_c
 		#print press
 		#print np.mean(press)

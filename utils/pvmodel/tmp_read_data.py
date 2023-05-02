@@ -58,7 +58,7 @@ class ReadData:
 
     def __read_data(self):
         lines = self.lines.split('\n')
-        lines = map(lambda x: x.strip(), lines)
+        lines = [x.strip() for x in lines]
         if lines[0][0] == '#':
             self.has_header = True
         elif lines[0][0:5] == 'keys:':
@@ -76,17 +76,17 @@ class ReadData:
                     keys = header.split()
                     for k in keys: self.keys[k] = keys.index(k)
                     nheader+=1
-                    if (self.keys.has_key('id')) or (self.keys.has_key('type')) or (self.keys.has_key('radius')) or(self.keys.has_key('x')):
+                    if ('id' in self.keys) or ('type' in self.keys) or ('radius' in self.keys) or('x' in self.keys):
                         read_keys=True
                 elif lines[0][0:5] == 'keys:':
                     header = lines[nheader].strip()[6:]
                     keys = header.split()
                     for k in keys: self.keys[k] = keys.index(k)
                     nheader+=1
-                    if (self.keys.has_key('id')) or (self.keys.has_key('type')) or (self.keys.has_key('radius')) or(self.keys.has_key('x')):
+                    if ('id' in self.keys) or ('type' in self.keys) or ('radius' in self.keys) or('x' in self.keys):
                         read_keys=True
                 else:
-                    print "Error: There are no keys for these file, just comments! Cannot determine type of input!"
+                    print("Error: There are no keys for these file, just comments! Cannot determine type of input!")
                     #print "Found " + str(nheader) + " lines of comments and keys "
                 lines = lines[nheader:]
                 self.data = [[] for i in range(len(keys))]
@@ -107,7 +107,7 @@ class ReadData:
         for line in lines:
             if not line: continue
             #should really cast data to the appropriate type, i.e. particle ids should be 'int'
-            data_line = map(float, line.split())
+            data_line = list(map(float, line.split()))
             if in_tissue(data_line):
             #if True:
                 # reading a tissue particle

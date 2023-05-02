@@ -35,21 +35,21 @@ parser.add_argument("-t", "--time", type=str, default='time_seq.dat', help="reco
 parser.add_argument("-T", "--type", type=str, default='sphere', help="system type (plane or sphere)")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tComputes order parameter for spherical systems"
-print 
-print "\tRastko Sknepnek"
-print "\tUniversity of Dundee"
-print "\t(c) 2014"
-print "\t----------------------------------------------"
-print
-print "\tInput files : ", args.input
-print "\tOutput files : ", args.output
-print "\tSkip frames : ", args.skip
-print "\tStore OP time sequence in : ", args.time
-print "\tSystem type : ", args.type
-print
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tComputes order parameter for spherical systems")
+print() 
+print("\tRastko Sknepnek")
+print("\tUniversity of Dundee")
+print("\t(c) 2014")
+print("\t----------------------------------------------")
+print()
+print("\tInput files : ", args.input)
+print("\tOutput files : ", args.output)
+print("\tSkip frames : ", args.skip)
+print("\tStore OP time sequence in : ", args.time)
+print("\tSystem type : ", args.type)
+print()
 
 start = datetime.now()
 
@@ -60,7 +60,7 @@ time_file = open(args.time,'w')
 op = []
 idx = 0
 for f in files:
-  print "Processing file : ", f
+  print("Processing file : ", f)
   data = ReadData(f)
   timestep = int(f.split('_')[-1].split('.')[0])
   frame_op = OP(data,args.type)
@@ -83,8 +83,8 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 

@@ -45,30 +45,30 @@ args = parser.parse_args()
 params = Param(args.directory+args.conffile)
 files = sorted(glob(args.directory + args.input+'*.dat'))[args.skip:]
 nfiles = len(files)
-print '----------------------------------------------------------------'
-print nfiles
+print('----------------------------------------------------------------')
+print(nfiles)
 # Get the relevant runtime parameters
-print params.dump['freq']
+print(params.dump['freq'])
 # Not this one - need to fix, expects a NVE as minimisation step. Need it to take *any* first run as a minimisatin step
 #print params.nsteps
-print params.dt
+print(params.dt)
 # Also not necessary
 #print params.int_params
 DataRun={'dt':params.dt, 'freqsave':int(params.dump['freq']),'nfiles':nfiles}
-print DataRun
+print(DataRun)
 
 if args.writeD:	
 	outpickle = args.directory+'defect_data.p'	
 else:
 	outpickle = args.directory+'configuration_data.p'
-print 'Using pickle file : ', outpickle
+print('Using pickle file : ', outpickle)
 # First read the dictionary out of the file
 data = pickle.load(open(outpickle, "rb"))
 # add our new data to it
 data.update(DataRun)
 # and save back
 pickle.dump(data,open(outpickle,'wb'))
-print data
+print(data)
 
 	
 	

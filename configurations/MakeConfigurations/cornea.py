@@ -184,22 +184,22 @@ parser.add_argument("-b", "--boundary", type=int, default=0, help="boundary n: 0
 parser.add_argument("-vb", "--verbose", type=bool, default=False, help="plot configuration?")
 args = parser.parse_args()
 
-print
-print "\tActive Particles on Curved Spaces (APCS)"
-print "\tBuilding of an initial cornea configuration"
-print 
-print "\tSilke Henkes, Rastko Sknepnek"
-print "\tUniversity of Aberdeen and University of Dundee"
-print "\t(c) 2013, 2015"
-print "\t----------------------------------------------"
-print 
-print "\tRadius : ", args.radius
-print "\tPacking fraction : ", args.phi
-print "\tAverage velocity : ", args.vavr
+print()
+print("\tActive Particles on Curved Spaces (APCS)")
+print("\tBuilding of an initial cornea configuration")
+print() 
+print("\tSilke Henkes, Rastko Sknepnek")
+print("\tUniversity of Aberdeen and University of Dundee")
+print("\t(c) 2013, 2015")
+print("\t----------------------------------------------")
+print() 
+print("\tRadius : ", args.radius)
+print("\tPacking fraction : ", args.phi)
+print("\tAverage velocity : ", args.vavr)
 N=int(round(4.0*args.radius**2*args.phi*(1.0-cos(args.alpha))))
-print "\tTotal number of particles : ", N
-print "\tOutput file : ", args.output
-print 
+print("\tTotal number of particles : ", N)
+print("\tOutput file : ", args.output)
+print() 
 
 start = datetime.now()
 
@@ -211,9 +211,9 @@ end = datetime.now()
 
 total = end - start
 
-print 
-print "  *** Completed in ", total.total_seconds(), " seconds *** "
-print
+print() 
+print("  *** Completed in ", total.total_seconds(), " seconds *** ")
+print()
 
 if args.verbose:
 	fig = plt.figure()
